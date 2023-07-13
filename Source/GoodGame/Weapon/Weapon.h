@@ -30,16 +30,16 @@ protected:
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
-		USkeletalMeshComponent* WeaponMesh;
+	USkeletalMeshComponent* WeaponMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
-		class USphereComponent* AreaSphere;
+	class USphereComponent* AreaSphere;
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
-		EWeaponState WeaponState;
+	EWeaponState WeaponState;
 
 	//UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
-	//class UWidgetComponent* PickupWidget;
+	class UWidgetComponent* PickupWidget;
 public:
 
 };
