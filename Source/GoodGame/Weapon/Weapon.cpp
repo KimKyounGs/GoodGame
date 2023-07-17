@@ -4,6 +4,7 @@
 #include "Weapon.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
+#include "GoodGame/Character/MainCharacter.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -12,7 +13,6 @@ AWeapon::AWeapon()
 	bReplicates = true;
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
-	WeaponMesh->SetupAttachment(RootComponent);
 	SetRootComponent(WeaponMesh);
 
 	// 무기를 떨어뜨릴 때 사용.
@@ -25,25 +25,71 @@ AWeapon::AWeapon()
 	AreaSphere->SetupAttachment(RootComponent); // 캐릭터와 무기의 겹침을 감지하기 위해서 사용.
 	AreaSphere->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	AreaSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
+	AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnSphereOverlap);
+	AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AWeapon::OnSphereEndOverlap);
+	
 	PickupWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PickupWidget"));
 	PickupWidget->SetupAttachment(RootComponent);
+
+
 }
 
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (PickupWidget)
+	{
+		PickupWidget->SetVisibility(true);
+	}
+	/*
 	// 서버에 있는 경우 -> 멀티플레이할 때 쓰는 것 일단 적어두고 주석처리
 	if (HasAuthority())
 	{
 		AreaSphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		AreaSphere->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 	}
+	*/
 }
 
 void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Log, TEXT("OnSphereOverlap"));
+	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
+
+	if (MainCharacter)
+	{
+		UE_LOG(LogTemp, Log, TEXT("HI"));
+		PickupWidget->SetVisibility(false);
+		//MainCharacter->SetOverlappingWeapon(this);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("Can't Overlap"));
+	}
+}
+
+void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	UE_LOG(LogTemp, Log, TEXT("OnSphereEndOverlap"));
+	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
+	if (MainCharacter)
+	{
+		//MainCharacter->SetOverlappingWeapon(nullptr);
+	}
+}
+
+
+void AWeapon::ShowPickupWidget(bool bShowWidget)
+{
+	if (PickupWidget)
+	{
+		PickupWidget->SetVisibility(bShowWidget);
+	}
 }

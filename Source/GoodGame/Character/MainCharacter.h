@@ -16,7 +16,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	//  클래스 내에서 네트워크 상에서 복제될 속성들을 정의하는 데 사용.
+	//virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -27,13 +28,19 @@ protected:
 	void LookUp(float Value);
 
 private:
-	UPROPERTY(VisibleAnywhere, Category = Camera)
-		class USpringArmComponent* CameraBoom;
+	UPROPERTY(VisibleAnywhere, Category = "Camera")
+	class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera)
-		class UCameraComponent* FollowCamera;
+	UPROPERTY(VisibleAnywhere, Category = "Camera")
+	class UCameraComponent* FollowCamera;
 
 
+
+	//UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon)
+	//class AWeapon* OverlappingWeapon;
+
+	//UFUNCTION()
+	//void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 public:
-
+	//FORCEINLINE void SetOverlappingWeapon(AWeapon* Weapon);
 };
