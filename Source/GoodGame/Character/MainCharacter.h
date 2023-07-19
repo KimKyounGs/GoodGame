@@ -39,11 +39,13 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UCombatComponent* Combat;
 
-	//UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon)
-	//class AWeapon* OverlappingWeapon;
+	UPROPERTY(VisibleAnywhere)
+	class AWeapon* OverlappingWeapon;
 
 	//UFUNCTION()
 	//void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 public:
 	//FORCEINLINE void SetOverlappingWeapon(AWeapon* Weapon);
+	FORCEINLINE void GetOverlappingWeapon(AWeapon* Weapon);
+	bool IsWeaponEquipped();
 };

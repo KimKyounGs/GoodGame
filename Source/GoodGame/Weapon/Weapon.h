@@ -44,7 +44,7 @@ protected:
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex
-		);
+	);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")

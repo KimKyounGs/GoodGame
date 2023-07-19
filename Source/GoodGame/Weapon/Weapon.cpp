@@ -66,12 +66,8 @@ void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	if (MainCharacter)
 	{
 		UE_LOG(LogTemp, Log, TEXT("HI"));
-		PickupWidget->SetVisibility(false);
-		//MainCharacter->SetOverlappingWeapon(this);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("Can't Overlap"));
+		ShowPickupWidget(false);
+		MainCharacter->GetOverlappingWeapon(this);
 	}
 }
 
@@ -81,7 +77,7 @@ void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 	if (MainCharacter)
 	{
-		//MainCharacter->SetOverlappingWeapon(nullptr);
+		MainCharacter->GetOverlappingWeapon(nullptr);
 	}
 }
 

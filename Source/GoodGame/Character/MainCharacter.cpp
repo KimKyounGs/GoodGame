@@ -59,23 +59,6 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Equip", IE_Pressed, this, &AMainCharacter::EquipButtonPressed);
 }
 
-/*
-void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
-}
-*/
-
-void AMainCharacter::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-	if (Combat)
-	{
-		Combat->Character = this;
-	}
-}
 
 void AMainCharacter::MoveForward(float Value)
 {
@@ -107,13 +90,55 @@ void AMainCharacter::LookUp(float Value)
 	AddControllerPitchInput(Value);
 }
 
+
+/*
+void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
+}
+*/
+
+void AMainCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	if (Combat)
+	{
+		Combat->Character = this;
+	}
+}
+
+
 void AMainCharacter::EquipButtonPressed()
 {
 	if (Combat)
 	{
-		//Combat->EquipWeapon(OverlappingWeapon);
+		Combat->EquipWeapon(OverlappingWeapon);
 	}
 }
+
+void AMainCharacter::GetOverlappingWeapon(AWeapon* Weapon)
+{
+	if (Weapon)
+	{
+		OverlappingWeapon = Weapon;
+		OverlappingWeapon->ShowPickupWidget(false);
+	}
+	else
+	{
+		OverlappingWeapon = Weapon;
+		OverlappingWeapon->ShowPickupWidget(true);
+	}
+
+}
+
+bool AMainCharacter::IsWeaponEquipped()
+{
+	return (Combat && Combat->EquippedWeapon);
+}
+
+
 /*
 void AMainCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 {

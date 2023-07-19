@@ -34,8 +34,11 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 {
-	if (Character == nullptr || WeaponToEquip == nullptr) return;
-
+	if (Character == nullptr || WeaponToEquip == nullptr)
+	{
+		if (WeaponToEquip == nullptr) UE_LOG(LogTemp, Log, TEXT("No Weapon"));
+		return;
+	}
 	EquippedWeapon = WeaponToEquip;
 	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
 	const USkeletalMeshSocket* HandSocket = Character->GetMesh()->GetSocketByName(FName("RightHandSocket"));
