@@ -13,16 +13,24 @@ class GOODGAME_API UCombatComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
-	UCombatComponent();
 
+	UCombatComponent();
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	friend class AMainCharacter;
+
+	void EquipWeapon(class AWeapon* WeaponToEquip);
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
+private:
+	
+	class AMainCharacter* Character;
+	AWeapon* EquippedWeapon;
+
 public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+
+
 
 		
 };

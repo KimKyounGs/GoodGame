@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GoodGame/Weapon/Weapon.h"
 #include "Components/CapsuleComponent.h"
+#include "GoodGame/MainComponents/CombatComponent.h"
 
 
 // Sets default values
@@ -29,6 +30,8 @@ AMainCharacter::AMainCharacter()
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
+	Combat = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
+	Combat->SetIsReplicated(true);
 }
 
 void AMainCharacter::BeginPlay()
@@ -53,7 +56,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &AMainCharacter::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &AMainCharacter::LookUp);
-
+	PlayerInputComponent->BindAction("Equip", IE_Pressed, this, &AMainCharacter::EquipButtonPressed);
 }
 
 /*
@@ -65,6 +68,14 @@ void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 }
 */
 
+void AMainCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	if (Combat)
+	{
+		Combat->Character = this;
+	}
+}
 
 void AMainCharacter::MoveForward(float Value)
 {
@@ -96,6 +107,13 @@ void AMainCharacter::LookUp(float Value)
 	AddControllerPitchInput(Value);
 }
 
+void AMainCharacter::EquipButtonPressed()
+{
+	if (Combat)
+	{
+		//Combat->EquipWeapon(OverlappingWeapon);
+	}
+}
 /*
 void AMainCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 {
