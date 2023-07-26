@@ -27,6 +27,7 @@ private:
 	class AMainCharacter* Character;
 	AWeapon* EquippedWeapon;
 
+	bool bAiming;
 public:	
 	
 

@@ -44,7 +44,7 @@ void AWeapon::BeginPlay()
 
 	if (PickupWidget)
 	{
-		PickupWidget->SetVisibility(true);
+		PickupWidget->SetVisibility(false);
 	}
 
 	/*
@@ -64,20 +64,17 @@ void AWeapon::Tick(float DeltaTime)
 
 void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Log, TEXT("OnSphereOverlap"));
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 
 	if (MainCharacter)
 	{
-		UE_LOG(LogTemp, Log, TEXT("HI"));
-		ShowPickupWidget(false);
+		ShowPickupWidget(true);
 		MainCharacter->GetOverlappingWeapon(this);
 	}
 }
 
 void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	UE_LOG(LogTemp, Log, TEXT("OnSphereEndOverlap"));
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 	if (MainCharacter)
 	{

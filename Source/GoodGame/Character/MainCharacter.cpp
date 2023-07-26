@@ -32,6 +32,8 @@ AMainCharacter::AMainCharacter()
 
 	Combat = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
 	Combat->SetIsReplicated(true);
+
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 }
 
 void AMainCharacter::BeginPlay()
@@ -59,6 +61,9 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("Equip", IE_Pressed, this, &AMainCharacter::EquipButtonPressed);
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMainCharacter::CrouchButtonPressed);
+
+	PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &AMainCharacter::AimButtonPressed);
+	PlayerInputComponent->BindAction("Aim", IE_Released, this, &AMainCharacter::AimButoonReleased);
 }
 
 
@@ -92,15 +97,6 @@ void AMainCharacter::LookUp(float Value)
 	AddControllerPitchInput(Value);
 }
 
-
-/*
-void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
-}
-*/
 
 void AMainCharacter::PostInitializeComponents()
 {
@@ -140,9 +136,38 @@ bool AMainCharacter::IsWeaponEquipped()
 	return (Combat && Combat->EquippedWeapon);
 }
 
+bool AMainCharacter::IsAiming()
+{
+	return (Combat && Combat->bAiming);
+}
+
 void AMainCharacter::CrouchButtonPressed()
 {
-	Crouch();
+	if (bIsCrouched)
+	{
+		UnCrouch();
+	}
+	else 
+	{
+		Crouch();
+	}
+
+}
+
+void AMainCharacter::AimButtonPressed()
+{
+	if (Combat)
+	{
+		Combat->bAiming = true;
+	}
+}
+
+void AMainCharacter::AimButoonReleased()
+{
+	if (Combat)
+	{
+		Combat->bAiming = false;
+	}
 }
 
 
@@ -151,6 +176,15 @@ void AMainCharacter::CrouchButtonPressed()
 
 
 
+
+/*
+void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
+}
+*/
 
 /*
 void AMainCharacter::SetOverlappingWeapon(AWeapon* Weapon)
