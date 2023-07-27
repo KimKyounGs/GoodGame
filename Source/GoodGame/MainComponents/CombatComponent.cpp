@@ -5,6 +5,7 @@
 #include "GoodGame/Weapon/Weapon.h"
 #include "GoodGame/Character/MainCharacter.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values for this component's properties
 UCombatComponent::UCombatComponent()
@@ -36,7 +37,6 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 {
 	if (Character == nullptr || WeaponToEquip == nullptr)
 	{
-		if (WeaponToEquip == nullptr) UE_LOG(LogTemp, Log, TEXT("No Weapon"));
 		return;
 	}
 	EquippedWeapon = WeaponToEquip;
@@ -47,5 +47,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 		HandSocket->AttachActor(EquippedWeapon, Character->GetMesh());
 	}
 	EquippedWeapon->SetOwner(Character);
-	EquippedWeapon->ShowPickupWidget(false);
+	Character->GetCharacterMovement()->bOrientRotationToMovement = false;
+	Character->bUseControllerRotationYaw = true;
+
 }
