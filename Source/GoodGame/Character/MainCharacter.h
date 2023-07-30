@@ -47,6 +47,20 @@ private:
 
 	//UFUNCTION()
 	//void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
+
+	/*
+	플레이어 체력
+	*/
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	float MaxHealth = 100.f;
+
+	UPROPERTY(ReplicatedUsing = OnRep_Health, VisibleAnywhere, Category = "Player Stats")
+	float Health = 100.f;
+
+	UFUNCTION()
+	void OnRep_Health();
+
+
 public:
 	//FORCEINLINE void SetOverlappingWeapon(AWeapon* Weapon);
 	FORCEINLINE void GetOverlappingWeapon(AWeapon* Weapon);
