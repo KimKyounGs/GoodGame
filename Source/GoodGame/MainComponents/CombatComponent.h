@@ -22,10 +22,20 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	void SetAiming(bool bIsAiming);
+
 private:
 	
 	class AMainCharacter* Character;
+
 	AWeapon* EquippedWeapon;
+
+
+	UPROPERTY(EditAnywhere)
+	float BaseWalkSpeed;
+
+	UPROPERTY(EditAnywhere)
+	float AimWalkSpeed;
 
 	bool bAiming;
 

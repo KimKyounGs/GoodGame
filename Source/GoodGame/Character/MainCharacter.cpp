@@ -8,6 +8,7 @@
 #include "GoodGame/Weapon/Weapon.h"
 #include "Components/CapsuleComponent.h"
 #include "GoodGame/MainComponents/CombatComponent.h"
+#include "Components/CapsuleComponent.h"
 
 
 // Sets default values
@@ -34,6 +35,8 @@ AMainCharacter::AMainCharacter()
 	Combat->SetIsReplicated(true);
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 }
 
 void AMainCharacter::BeginPlay()
@@ -121,12 +124,12 @@ void AMainCharacter::GetOverlappingWeapon(AWeapon* Weapon)
 	if (Weapon)
 	{
 		OverlappingWeapon = Weapon;
-		OverlappingWeapon->ShowPickupWidget(false);
+		OverlappingWeapon->ShowPickupWidget(true);
 	}
 	else
 	{
-		OverlappingWeapon = Weapon;
-		OverlappingWeapon->ShowPickupWidget(true);
+		OverlappingWeapon = NULL;
+		OverlappingWeapon->ShowPickupWidget(false);
 	}
 
 }
@@ -136,10 +139,6 @@ bool AMainCharacter::IsWeaponEquipped()
 	return (Combat && Combat->EquippedWeapon);
 }
 
-bool AMainCharacter::IsAiming()
-{
-	return (Combat && Combat->bAiming);
-}
 
 void AMainCharacter::CrouchButtonPressed()
 {
@@ -154,11 +153,16 @@ void AMainCharacter::CrouchButtonPressed()
 
 }
 
+bool AMainCharacter::IsAiming()
+{
+	return (Combat && Combat->bAiming);
+}
+
 void AMainCharacter::AimButtonPressed()
 {
 	if (Combat)
 	{
-		Combat->bAiming = true;
+		Combat->SetAiming(true);
 	}
 }
 
@@ -166,7 +170,7 @@ void AMainCharacter::AimButoonReleased()
 {
 	if (Combat)
 	{
-		Combat->bAiming = false;
+		Combat->SetAiming(false);
 	}
 }
 
