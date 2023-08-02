@@ -57,4 +57,6 @@ void UMainCharacterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	const float Interp = FMath::FInterpTo(Lean, Target, DeltaTime, 6.f); // 보간연산 -> 부드럽게 새로운 방향으로 전환
 	Lean = FMath::Clamp(Interp, -90.f, 90.f); // 사이값 제한 이렇게 하면 캐릭터의 기울기가 과하게 변경되는 것 방지.
 	
+	AO_Yaw = MainCharacter->GetAO_Yaw();
+	AO_Pitch = MainCharacter->GetAO_Pitch();
 }
