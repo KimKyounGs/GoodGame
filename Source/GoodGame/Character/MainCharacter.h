@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GoodGame/MainCharacterTypes/TurningInPlace.h"
 #include "MainCharacter.generated.h"
 
 UCLASS()
@@ -50,8 +51,12 @@ private:
 	//void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 
 	float AO_Yaw;
+	float InterpAO_Yaw;
 	float AO_Pitch;
 	FRotator StartingAimRotation;
+
+	ETurningInPlace TurningInPlace;
+	void TurnInPlace(float DeltaTime);
 
 	/*
 	플레이어 체력
@@ -71,4 +76,7 @@ public:
 	bool IsAiming();
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
+	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
+
+	AWeapon* GetEquippedWeapon();
 };

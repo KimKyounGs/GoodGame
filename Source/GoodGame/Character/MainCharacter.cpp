@@ -38,6 +38,8 @@ AMainCharacter::AMainCharacter()
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+
+	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 }
 
 void AMainCharacter::BeginPlay()
@@ -103,6 +105,19 @@ void AMainCharacter::LookUp(float Value)
 }
 
 
+void AMainCharacter::CrouchButtonPressed()
+{
+	if (bIsCrouched)
+	{
+		UnCrouch();
+	}
+	else
+	{
+		Crouch();
+	}
+
+}
+
 void AMainCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -120,6 +135,7 @@ void AMainCharacter::EquipButtonPressed()
 		Combat->EquipWeapon(OverlappingWeapon);
 	}
 }
+
 
 void AMainCharacter::GetOverlappingWeapon(AWeapon* Weapon)
 {
@@ -142,23 +158,12 @@ bool AMainCharacter::IsWeaponEquipped()
 }
 
 
-void AMainCharacter::CrouchButtonPressed()
-{
-	if (bIsCrouched)
-	{
-		UnCrouch();
-	}
-	else 
-	{
-		Crouch();
-	}
-
-}
 
 bool AMainCharacter::IsAiming()
 {
 	return (Combat && Combat->bAiming);
 }
+
 
 void AMainCharacter::AimButtonPressed()
 {
@@ -176,6 +181,30 @@ void AMainCharacter::AimButoonReleased()
 	}
 }
 
+void AMainCharacter::TurnInPlace(float DeltaTime)
+{
+	// UE_LOG(LogTemp, Warning, TEXT("AO_Yaw : %f"), AO_Yaw);
+	if (AO_Yaw > 90.f)
+	{
+		TurningInPlace = ETurningInPlace::ETIP_Right;
+	}
+	else if (AO_Yaw < -90.f)
+	{
+		TurningInPlace = ETurningInPlace::ETIP_Left;
+	}
+	if (TurningInPlace != ETurningInPlace::ETIP_NotTurning)
+	{
+		InterpAO_Yaw = FMath::FInterpTo(InterpAO_Yaw, 0.f, DeltaTime, 10.f);
+		AO_Yaw = InterpAO_Yaw;
+		if (FMath::Abs(AO_Yaw) < 15.f)
+		{
+			TurningInPlace = ETurningInPlace::ETIP_NotTurning;
+			StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		}
+	}
+}
+
+
 void AMainCharacter::AimOffSet(float DeltaTime)
 {
 	if (Combat && Combat->EquippedWeapon == nullptr) return;
@@ -189,18 +218,40 @@ void AMainCharacter::AimOffSet(float DeltaTime)
 		FRotator CurrentAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
 		FRotator DeltaAimRotation = UKismetMathLibrary::NormalizedDeltaRotator(StartingAimRotation, CurrentAimRotation); // 강의랑 반대로 하니깐 되는데..?
 		AO_Yaw = DeltaAimRotation.Yaw;
-		bUseControllerRotationYaw = false;
+		if (TurningInPlace == ETurningInPlace::ETIP_NotTurning)
+		{
+			InterpAO_Yaw = AO_Yaw;
+		}
+		bUseControllerRotationYaw = true;
+		TurnInPlace(DeltaTime);
 	}
 	if (Speed > 0.f || bIsInAir) // running, or jumping
 	{
 		StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
 		AO_Yaw = 0.f;
 		bUseControllerRotationYaw = true;
+		TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 	}
 
 	AO_Pitch = GetBaseAimRotation().Pitch;
+
+	/*
+	if (AO_Pitch > 90.f && !IsLocallyControlled()
+	{
+		FVector2D InRange(270.f, 360.f);
+		FVector2D OutRange(-90.f, 0.f);
+		AO_Pitch = FMath::GetMappedRangeValueClamped(InRange, OutRange, AO_Pitch);
+	}
+	*/
+
 }
 
+
+AWeapon* AMainCharacter::GetEquippedWeapon()
+{
+	if (Combat == nullptr) return nullptr;
+	return Combat->EquippedWeapon;
+}
 
 
 
