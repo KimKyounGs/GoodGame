@@ -24,6 +24,8 @@ protected:
 
 	void SetAiming(bool bIsAiming);
 
+	void FireButtonPressed(bool bPressed);
+
 private:
 	
 	class AMainCharacter* Character;
@@ -39,6 +41,7 @@ private:
 
 	bool bAiming;
 
+	bool bFireButtonPressed;
 
 public:	
 	

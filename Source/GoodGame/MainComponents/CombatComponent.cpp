@@ -66,3 +66,17 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	Character->bUseControllerRotationYaw = true;
 	EquippedWeapon->ShowPickupWidget(false);
 }
+
+
+void UCombatComponent::FireButtonPressed(bool bPressed)
+{
+	bFireButtonPressed = bPressed;
+
+	if (EquippedWeapon == nullptr) return;
+
+	if (Character && bFireButtonPressed)
+	{
+		Character->PlayFireMontage(bAiming);
+		EquippedWeapon->Fire(); // 애니메이션
+	}
+}

@@ -10,6 +10,7 @@
 #include "GoodGame/MainComponents/CombatComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "MainCharacterAnimInstance.h"
 
 
 // Sets default values
@@ -72,6 +73,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &AMainCharacter::AimButtonPressed);
 	PlayerInputComponent->BindAction("Aim", IE_Released, this, &AMainCharacter::AimButoonReleased);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMainCharacter::FireButtonPressed);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AMainCharacter::FireButtonReleased);
 }
 
 
@@ -268,6 +271,39 @@ AWeapon* AMainCharacter::GetEquippedWeapon()
 	return Combat->EquippedWeapon;
 }
 
+
+void AMainCharacter::FireButtonPressed()
+{
+	if (Combat)
+	{
+		Combat->FireButtonPressed(true);
+	}
+}
+
+void AMainCharacter::FireButtonReleased()
+{
+	if (Combat)
+	{
+		Combat->FireButtonPressed(false);
+	}
+}
+
+
+void AMainCharacter::PlayFireMontage(bool bAiming)
+{
+	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && FireWeaponMontage)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Play Montage2"));
+		// 에임조준에 있냐 안되어있냐에 따라서 몽타주 섹션 재생을 함. (에임하는 중이면 RifleAim으로 되어있는 섹션 애니메이션을 실행.)
+		AnimInstance->Montage_Play(FireWeaponMontage);
+		FName SectionName;
+		SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
+		AnimInstance->Montage_JumpToSection(SectionName);
+	}
+}
 
 
 

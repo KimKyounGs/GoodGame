@@ -20,6 +20,7 @@ public:
 	//  클래스 내에서 네트워크 상에서 복제될 속성들을 정의하는 데 사용.
 	//virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostInitializeComponents() override;
+	void PlayFireMontage(bool bAiming);
 
 protected:
 	virtual void BeginPlay() override;
@@ -34,6 +35,8 @@ protected:
 	void AimButoonReleased();
 	void AimOffSet(float DeltaTime);
 	virtual void Jump() override;
+	void FireButtonPressed();
+	void FireButtonReleased();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
@@ -58,6 +61,9 @@ private:
 
 	ETurningInPlace TurningInPlace;
 	void TurnInPlace(float DeltaTime);
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	class UAnimMontage* FireWeaponMontage;
 
 	/*
 	플레이어 체력
