@@ -65,15 +65,13 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	class UAnimMontage* FireWeaponMontage;
 
-	/*
-	플레이어 체력
-	*/
-	UPROPERTY(EditAnywhere, Category = "Player Stats")
-	float MaxHealth = 100.f;
+public:
+	//플레이어 체력
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
+		float MaxHealth = 100.f;
 
-	UPROPERTY(VisibleAnywhere, Category = "Player Stats")
-	float Health = 100.f;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
+		float Health = 100.f;
 
 
 public:

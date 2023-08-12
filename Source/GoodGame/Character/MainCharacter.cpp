@@ -11,6 +11,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "MainCharacterAnimInstance.h"
+#include "Blueprint/UserWidget.h"
 
 
 // Sets default values
@@ -42,11 +43,24 @@ AMainCharacter::AMainCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f, 850.f);
 
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
+	Health = 100.0f;
+	MaxHealth = 100.0f;
 }
 
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	//float CurrentHealthPercentage = Health / MaxHealth;
+	//if (UUserWidget* HealthBarWidget = Cast<UUserWidget>(YourProgressBarWidgetInstance)) // YourProgressBarWidgetInstance는 위젯 인스턴스에 대한 포인터
+	//{
+	//	UProgressBar* HealthProgressBar = nullptr;
+	//	HealthBarWidget->GetWidget(/* Find ProgressBar widget here */, HealthProgressBar); // 프로그래스 바 위젯을 찾는 코드를 작성해야 함
+
+	//	if (HealthProgressBar)
+	//	{
+	//		HealthProgressBar->SetPercent(CurrentHealthPercentage);
+	//	}
+	//}
 
 }
 
@@ -304,10 +318,6 @@ void AMainCharacter::PlayFireMontage(bool bAiming)
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
-
-
-
-
 
 
 /*
