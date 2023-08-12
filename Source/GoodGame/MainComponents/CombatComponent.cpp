@@ -6,12 +6,13 @@
 #include "GoodGame/Character/MainCharacter.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values for this component's properties
 UCombatComponent::UCombatComponent()
 {
-
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 
 	BaseWalkSpeed = 600.f;
 	AimWalkSpeed = 200.f;
@@ -35,6 +36,9 @@ void UCombatComponent::BeginPlay()
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	FHitResult HitResult;
+	TraceUnderCrosshairs(HitResult);
 
 }
 
@@ -79,4 +83,61 @@ void UCombatComponent::FireButtonPressed(bool bPressed)
 		Character->PlayFireMontage(bAiming);
 		EquippedWeapon->Fire(); // 애니메이션
 	}
+}
+
+void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
+{
+	// viewport size가 필요함
+	// 화면 중앙에 위치하는 조준점을 만들기 위해 화면 중앙 위치를 월드 좌표와 방향으로 변환해서 사용.
+	FVector2D ViewportSize;
+	if (GEngine && GEngine->GameViewport)
+	{
+		GEngine->GameViewport->GetViewportSize(ViewportSize);
+	}
+
+	FVector2D CrosshairLocation(ViewportSize.X / 2.f, ViewportSize.Y / 2.f);
+	FVector CrosshairWorldPosition;
+	FVector CrosshairWorldDirection;
+	// UGameplayStatics::DeprojectScreenToWorld : 화면의 특정 위치에서 월드 좌표로의 변환을 수행하는 함수입니다.
+	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(
+		UGameplayStatics::GetPlayerController(this, 0),
+		CrosshairLocation,
+		CrosshairWorldPosition,
+		CrosshairWorldDirection
+	);
+
+	//  화면 중앙에서 시작하여 월드 방향으로 레이를 발사하고 그 결과를 처리하는 것입니다.
+	if (bScreenToWorld)
+	{
+		FVector Start = CrosshairWorldPosition;
+
+		FVector End = Start + CrosshairWorldDirection * TRACE_LENGTH;
+
+		GetWorld()->LineTraceSingleByChannel(
+			TraceHitResult,
+			Start,
+			End,
+			ECollisionChannel::ECC_Visibility // 어떤 오브젝트들이 레이와 충돌할 수 있는지를 정의한다.
+		);
+
+		// 충돌안했을 때
+		if (!TraceHitResult.bBlockingHit)
+		{
+			// ImpactPoint는 레이나 물체가 다른 오브젝트와 충돌했을 때 그 정확한 위치를 나타냅니다.
+			// 충돌을 안했으니깐 충돌 위치를 End로 표시.
+			TraceHitResult.ImpactPoint = End;
+		}
+		// 충돌했을 때
+		else 
+		{
+			DrawDebugSphere(
+				GetWorld(),
+				TraceHitResult.ImpactPoint,
+				12.f,
+				12,
+				FColor::Red
+			);
+		}
+	}
+
 }

@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "CombatComponent.generated.h"
 
+#define TRACE_LENGTH 80000.f
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GOODGAME_API UCombatComponent : public UActorComponent
@@ -25,6 +27,9 @@ protected:
 	void SetAiming(bool bIsAiming);
 
 	void FireButtonPressed(bool bPressed);
+
+	// Line trace 
+	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 private:
 	
