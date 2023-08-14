@@ -81,7 +81,7 @@ void UCombatComponent::FireButtonPressed(bool bPressed)
 	if (Character && bFireButtonPressed)
 	{
 		Character->PlayFireMontage(bAiming);
-		EquippedWeapon->Fire(); // 애니메이션
+		EquippedWeapon->Fire(HitTarget); // 애니메이션
 	}
 }
 
@@ -126,10 +126,12 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 			// ImpactPoint는 레이나 물체가 다른 오브젝트와 충돌했을 때 그 정확한 위치를 나타냅니다.
 			// 충돌을 안했으니깐 충돌 위치를 End로 표시.
 			TraceHitResult.ImpactPoint = End;
+			HitTarget = End;
 		}
 		// 충돌했을 때
 		else 
 		{
+			HitTarget = TraceHitResult.ImpactPoint;
 			DrawDebugSphere(
 				GetWorld(),
 				TraceHitResult.ImpactPoint,
