@@ -31,9 +31,14 @@ protected:
 	// Line trace 
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
+	void SetHUDCrosshairs(float DeltaTime);
+
 private:
 	
 	class AMainCharacter* Character;
+	// 나중에 맵 새로 파면 이 부분 블프 고쳐주기.
+	class AMainPlayController* Controller;
+	class AMainHUD* HUD;
 
 	AWeapon* EquippedWeapon;
 

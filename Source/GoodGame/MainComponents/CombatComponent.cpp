@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "GoodGame/PlayerController/MainPlayController.h"
+#include "GoodGame/HUD/MainHUD.h"
 
 // Sets default values for this component's properties
 UCombatComponent::UCombatComponent()
@@ -40,6 +42,40 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	FHitResult HitResult;
 	TraceUnderCrosshairs(HitResult);
 
+	SetHUDCrosshairs(DeltaTime);
+
+}
+
+void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
+{
+	if (Character == nullptr || Character->Controller == nullptr) return;
+
+	Controller = Controller == nullptr ? Cast<AMainPlayController>(Character->Controller) : Controller;
+	if (Controller)
+	{
+		HUD = HUD == nullptr ? Cast<AMainHUD>(Controller->GetHUD()) : HUD;
+		if (HUD)
+		{
+			FHUDPackage HUDPackage;
+			if (EquippedWeapon)
+			{
+				HUDPackage.CrosshairsCenter = EquippedWeapon->CrosshairsCenter;
+				HUDPackage.CrosshairsLeft = EquippedWeapon->CrosshairsLeft;
+				HUDPackage.CrosshairsRight = EquippedWeapon->CrosshairsRight;
+				HUDPackage.CrosshairsBottom = EquippedWeapon->CrosshairsBottom;
+				HUDPackage.CrosshairsTop = EquippedWeapon->CrosshairsTop;
+			}
+			else
+			{
+				HUDPackage.CrosshairsCenter = nullptr;
+				HUDPackage.CrosshairsLeft = nullptr;
+				HUDPackage.CrosshairsRight = nullptr;
+				HUDPackage.CrosshairsBottom = nullptr;
+				HUDPackage.CrosshairsTop = nullptr;
+			}
+			HUD->SetHUDPackage(HUDPackage);
+		}
+	}
 }
 
 void UCombatComponent::SetAiming(bool bIsAiming)
@@ -132,13 +168,6 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 		else 
 		{
 			HitTarget = TraceHitResult.ImpactPoint;
-			DrawDebugSphere(
-				GetWorld(),
-				TraceHitResult.ImpactPoint,
-				12.f,
-				12,
-				FColor::Red
-			);
 		}
 	}
 
