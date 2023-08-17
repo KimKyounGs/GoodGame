@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GoodGame/MainCharacterTypes/TurningInPlace.h"
+#include "GoodGame/Interfaces/InteractWithCrosshairInterface.h"
 #include "MainCharacter.generated.h"
 
 UCLASS()
-class GOODGAME_API AMainCharacter : public ACharacter
+class GOODGAME_API AMainCharacter : public ACharacter, public IInteractWithCrosshairInterface
 {
 	GENERATED_BODY()
 
@@ -65,6 +66,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	class UAnimMontage* FireWeaponMontage;
 
+
+	void HideCameraIfCharacterClose();
+
+	UPROPERTY(EditAnywhere)
+	float CameraThreshold = 200.f;
+
 public:
 	//플레이어 체력
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
@@ -83,6 +90,6 @@ public:
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
 	FVector GetHitTarget() const;
-
+	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	AWeapon* GetEquippedWeapon();
 };
