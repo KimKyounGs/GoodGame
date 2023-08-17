@@ -55,6 +55,16 @@ private:
 
 	FVector HitTarget;
 
+	/**
+	* HUD and crosshairs
+	*/
+
+	float CrosshairVelocityFactor;
+	float CrosshairInAirFactor;
+	
+	FVector HitTargetForHand;
+
+
 public:	
 	
 

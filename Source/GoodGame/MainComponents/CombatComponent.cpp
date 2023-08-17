@@ -44,6 +44,13 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 	SetHUDCrosshairs(DeltaTime);
 
+	if (Character)
+	{
+		FHitResult HitResultForHand;
+		TraceUnderCrosshairs(HitResultForHand);
+		HitTargetForHand = HitResultForHand.ImpactPoint;
+	}
+
 }
 
 void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
@@ -73,6 +80,43 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 				HUDPackage.CrosshairsBottom = nullptr;
 				HUDPackage.CrosshairsTop = nullptr;
 			}
+
+			// Calculate crosshair spread
+
+			// [0, 600] -> [0, 1]
+			FVector2D WalkSpeedRange(0.f, Character->GetCharacterMovement()->MaxWalkSpeed);
+			FVector2D VelocityMultiplierRange(0.f, 1.f);
+			FVector Velocity = Character->GetVelocity();
+			Velocity.Z = 0.f;
+
+			/* 
+			FMath::GetMappedRangeValueClamped 함수는 캐릭터의 현재 속도(Velocity.Size())를 WalkSpeedRange에서 VelocityMultiplierRange로 매핑합니다.
+			이렇게 계산된 값은 CrosshairVelocityFactor에 저장됩니다.
+			*/
+			CrosshairVelocityFactor = FMath::GetMappedRangeValueClamped(WalkSpeedRange, VelocityMultiplierRange, Velocity.Size());
+
+			if (Character->GetCharacterMovement()->IsFalling())
+			{
+				// 공중에 있다면 CrosshairInAirFactor를 2.25f로 보간합니다.이는 공중에 있는 동안 크로스헤어가 더 많이 퍼지게 만듭니다.
+				CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 2.25f, DeltaTime, 2.25f);
+			}
+			else
+			{
+				CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 0.f, DeltaTime, 30.f);
+			}
+			/*
+			CrosshairSpread (크로스헤어의 퍼짐 정도를 나타내는 값)은 
+			CrosshairVelocityFactor (캐릭터의 속도에 기반한 퍼짐 요소)와 CrosshairInAirFactor (캐릭터가 공중에 있는지에 기반한 퍼짐 요소)의 합으로 계산됩니다.
+			*/
+
+			/*
+			* 엎드리면 조준점 퍼지는 것 막기.
+			* if (Character->GetCharacterMovement()->IsCrouching())  CrosshairVelocityFactor = 0.f;
+			*/
+
+
+			HUDPackage.CrosshairSpread = CrosshairVelocityFactor + CrosshairInAirFactor;
+
 			HUD->SetHUDPackage(HUDPackage);
 		}
 	}

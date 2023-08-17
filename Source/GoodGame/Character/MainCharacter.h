@@ -68,10 +68,10 @@ private:
 public:
 	//플레이어 체력
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
-		float MaxHealth = 100.f;
+	float MaxHealth = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
-		float Health = 100.f;
+	float Health = 100.f;
 
 
 public:
@@ -82,6 +82,7 @@ public:
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
+	FVector GetHitTarget() const;
 
 	AWeapon* GetEquippedWeapon();
 };
