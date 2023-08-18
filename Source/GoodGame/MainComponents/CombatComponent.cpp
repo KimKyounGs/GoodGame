@@ -12,6 +12,7 @@
 #include "GoodGame/HUD/MainHUD.h"
 #include "Camera/CameraComponent.h"
 #include "GoodGame/HUD/MainHUD.h"
+#include "TimerManager.h"
 
 // Sets default values for this component's properties
 UCombatComponent::UCombatComponent()
@@ -62,6 +63,56 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	}
 
 }
+
+void UCombatComponent::FireButtonPressed(bool bPressed)
+{
+	bFireButtonPressed = bPressed;
+
+	if (EquippedWeapon == nullptr) return;
+
+	if (Character && bFireButtonPressed)
+	{
+		Fire();
+	}
+}
+
+void UCombatComponent::Fire()
+{
+	if (bCanFire)
+	{
+		bCanFire = false;
+		Character->PlayFireMontage(bAiming);
+		EquippedWeapon->Fire(HitTarget); // 애니메이션
+
+		if (EquippedWeapon)
+		{
+			CrosshairShootingFactor = .75f;
+		}
+		StartFireTimer();
+	}
+}
+
+void UCombatComponent::StartFireTimer()
+{
+	if (EquippedWeapon == nullptr || Character == nullptr) return;
+	Character->GetWorldTimerManager().SetTimer(
+		FireTimer,
+		this,
+		&UCombatComponent::FireTimerFinished,
+		EquippedWeapon->FireDelay
+	);
+}
+
+void UCombatComponent::FireTimerFinished()
+{
+	if (EquippedWeapon == nullptr) return;
+	bCanFire = true;
+	if (bFireButtonPressed && EquippedWeapon->bAutomatic)
+	{
+		Fire();
+	}
+}
+
 
 void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 {
@@ -243,6 +294,7 @@ void UCombatComponent::InterpFOV(float DeltaTime)
 	}
 }
 
+
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 {
 	if (Character == nullptr || WeaponToEquip == nullptr)
@@ -260,23 +312,4 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	Character->GetCharacterMovement()->bOrientRotationToMovement = false;
 	Character->bUseControllerRotationYaw = true;
 	EquippedWeapon->ShowPickupWidget(false);
-}
-
-
-void UCombatComponent::FireButtonPressed(bool bPressed)
-{
-	bFireButtonPressed = bPressed;
-
-	if (EquippedWeapon == nullptr) return;
-
-	if (Character && bFireButtonPressed)
-	{
-		Character->PlayFireMontage(bAiming);
-		EquippedWeapon->Fire(HitTarget); // 애니메이션
-
-		if (EquippedWeapon)
-		{
-			CrosshairShootingFactor = .75f;
-		}
-	}
 }

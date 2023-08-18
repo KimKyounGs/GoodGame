@@ -12,7 +12,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "MainCharacterAnimInstance.h"
 #include "Blueprint/UserWidget.h"
-
+#include "GoodGame/GoodGame.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -39,6 +39,7 @@ AMainCharacter::AMainCharacter()
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionObjectType(ECC_SkeletalMesh);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f, 850.f);
@@ -311,11 +312,24 @@ void AMainCharacter::PlayFireMontage(bool bAiming)
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && FireWeaponMontage)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Play Montage2"));
+		//UE_LOG(LogTemp, Warning, TEXT("Play Montage2"));
 		// 에임조준에 있냐 안되어있냐에 따라서 몽타주 섹션 재생을 함. (에임하는 중이면 RifleAim으로 되어있는 섹션 애니메이션을 실행.)
 		AnimInstance->Montage_Play(FireWeaponMontage);
 		FName SectionName;
 		SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
+		AnimInstance->Montage_JumpToSection(SectionName);
+	}
+}
+
+void AMainCharacter::PlayHitReactMontage()
+{
+	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && HitReactMontage)
+	{
+		AnimInstance->Montage_Play(HitReactMontage);
+		FName SectionName("FromFront");
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
