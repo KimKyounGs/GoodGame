@@ -54,12 +54,8 @@ void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	MainPlayerController = Cast<AMainPlayController>(Controller);
-	if (MainPlayerController)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SetHUDHealth"));
-		MainPlayerController->SetHUDHealth(Health, MaxHealth);
-	}
+	UpdateHUDHealth();
+	OnTakeAnyDamage.AddDynamic(this, &AMainCharacter::ReceiveDamage);
 
 }
 
@@ -188,13 +184,10 @@ bool AMainCharacter::IsWeaponEquipped()
 	return (Combat && Combat->EquippedWeapon);
 }
 
-
-
 bool AMainCharacter::IsAiming()
 {
 	return (Combat && Combat->bAiming);
 }
-
 
 void AMainCharacter::AimButtonPressed()
 {
@@ -234,7 +227,6 @@ void AMainCharacter::TurnInPlace(float DeltaTime)
 		}
 	}
 }
-
 
 void AMainCharacter::AimOffSet(float DeltaTime)
 {
@@ -284,7 +276,6 @@ AWeapon* AMainCharacter::GetEquippedWeapon()
 	return Combat->EquippedWeapon;
 }
 
-
 void AMainCharacter::FireButtonPressed()
 {
 	if (Combat)
@@ -300,7 +291,6 @@ void AMainCharacter::FireButtonReleased()
 		Combat->FireButtonPressed(false);
 	}
 }
-
 
 void AMainCharacter::PlayFireMontage(bool bAiming)
 {
@@ -337,6 +327,21 @@ FVector AMainCharacter::GetHitTarget() const
 	return Combat->HitTarget;
 }
 
+void AMainCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
+{
+	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
+	UpdateHUDHealth();
+	PlayHitReactMontage();
+}
+
+void AMainCharacter::UpdateHUDHealth()
+{
+	MainPlayerController = MainPlayerController == nullptr ? Cast<AMainPlayController>(Controller) : MainPlayerController;
+	if (MainPlayerController)
+	{
+		MainPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
+}
 
 
 void AMainCharacter::HideCameraIfCharacterClose()
