@@ -2,6 +2,27 @@
 
 
 #include "MainHUD.h"
+#include "GameFramework/PlayerController.h"
+#include "CharacterOverlay.h"
+
+void AMainHUD::BeginPlay() 
+{
+	Super::BeginPlay();
+
+	AddCharacterOverlay();
+}
+
+void AMainHUD::AddCharacterOverlay() 
+{
+	// 일반적으로 UI 위젯이나 게임 내의 다른 오브젝트들이 현재 어떤 플레이어에 의해 컨트롤되고 있는지 파악할 때 사용됩니다.
+	APlayerController* PlayerController = GetOwningPlayerController();
+	if (PlayerController && CharacterOverlayClass)
+	{
+		CharacterOverlay = CreateWidget<UCharacterOverlay>(PlayerController, CharacterOverlayClass);
+		CharacterOverlay->AddToViewport();
+	}
+
+}
 
 void AMainHUD::DrawHUD()
 {
