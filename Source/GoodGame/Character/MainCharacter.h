@@ -85,6 +85,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
 	float Health = 100.f;
 
+	class AMainPlayController* MainPlayerController;
+
 
 public:
 	//FORCEINLINE void SetOverlappingWeapon(AWeapon* Weapon);

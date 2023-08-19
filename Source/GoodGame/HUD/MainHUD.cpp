@@ -9,11 +9,12 @@ void AMainHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AddCharacterOverlay();
+	//AddCharacterOverlay();
 }
 
 void AMainHUD::AddCharacterOverlay()
 {
+	// GetOwningPlayerController: 이 함수는 일반적으로 UI 위젯이나 게임 내의 다른 오브젝트들이 현재 어떤 플레이어에 의해 컨트롤되고 있는지 파악할 때 사용
 	APlayerController* PlayerController = GetOwningPlayerController();
 	if (PlayerController && CharacterOverlayClass)
 	{

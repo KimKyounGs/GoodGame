@@ -13,6 +13,7 @@
 #include "MainCharacterAnimInstance.h"
 #include "Blueprint/UserWidget.h"
 #include "GoodGame/GoodGame.h"
+#include "GoodGame/PlayerController/MainPlayController.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -52,17 +53,13 @@ AMainCharacter::AMainCharacter()
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	//float CurrentHealthPercentage = Health / MaxHealth;
-	//if (UUserWidget* HealthBarWidget = Cast<UUserWidget>(YourProgressBarWidgetInstance)) // YourProgressBarWidgetInstance는 위젯 인스턴스에 대한 포인터
-	//{
-	//	UProgressBar* HealthProgressBar = nullptr;
-	//	HealthBarWidget->GetWidget(/* Find ProgressBar widget here */, HealthProgressBar); // 프로그래스 바 위젯을 찾는 코드를 작성해야 함
 
-	//	if (HealthProgressBar)
-	//	{
-	//		HealthProgressBar->SetPercent(CurrentHealthPercentage);
-	//	}
-	//}
+	MainPlayerController = Cast<AMainPlayController>(Controller);
+	if (MainPlayerController)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SetHUDHealth"));
+		MainPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
 
 }
 
