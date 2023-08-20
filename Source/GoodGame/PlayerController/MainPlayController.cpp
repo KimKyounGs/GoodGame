@@ -37,7 +37,20 @@ void AMainPlayController::SetHUDHealth(float Health, float MaxHealth)
 	}
 	else 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Null bHUDValid"));
+		UE_LOG(LogTemp, Warning, TEXT("NULL bHUDValid"));
 	}
 	
+}
+
+void AMainPlayController::SetHUDWeaponAmmo(int32 Ammo)
+{
+	MainHUD = MainHUD == nullptr ? Cast<AMainHUD>(GetHUD()) : MainHUD;
+	bool bHUDValid = MainHUD &&
+		MainHUD->CharacterOverlay &&
+		MainHUD->CharacterOverlay->WeaponAmmoAmount;
+	if (bHUDValid)
+	{
+		FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
+		MainHUD->CharacterOverlay->WeaponAmmoAmount->SetText(FText::FromString(AmmoText));
+	}
 }

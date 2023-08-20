@@ -23,6 +23,7 @@ public:
 	virtual void PostInitializeComponents() override;
 	void PlayFireMontage(bool bAiming);
 	void PlayHitReactMontage();
+	void Elim();
 
 
 protected:

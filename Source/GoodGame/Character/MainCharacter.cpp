@@ -14,6 +14,7 @@
 #include "Blueprint/UserWidget.h"
 #include "GoodGame/GoodGame.h"
 #include "GoodGame/PlayerController/MainPlayController.h"
+#include "GoodGame/GameMode/MainGameMode.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -332,6 +333,17 @@ void AMainCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDa
 	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
 	UpdateHUDHealth();
 	PlayHitReactMontage();
+
+	if (Health == 0.f)
+	{
+		AMainGameMode* MainGameMode = GetWorld()->GetAuthGameMode<AMainGameMode>();
+		if (MainGameMode)
+		{
+			MainPlayerController = MainPlayerController == nullptr ? Cast<AMainPlayController>(Controller) : MainPlayerController;
+			AMainPlayController* AttackerController = Cast<AMainPlayController>(InstigatorController);
+			MainGameMode->PlayerEliminated(this, MainPlayerController, AttackerController);
+		}
+	}
 }
 
 void AMainCharacter::UpdateHUDHealth()
@@ -343,6 +355,10 @@ void AMainCharacter::UpdateHUDHealth()
 	}
 }
 
+void AMainCharacter::Elim() 
+{
+
+}
 
 void AMainCharacter::HideCameraIfCharacterClose()
 {

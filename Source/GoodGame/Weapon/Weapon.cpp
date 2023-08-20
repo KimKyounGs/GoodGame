@@ -9,6 +9,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Casing.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "GoodGame/PlayerController/MainPlayController.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -94,6 +95,17 @@ void AWeapon::ShowPickupWidget(bool bShowWidget)
 	}
 }
 
+void AWeapon::Dropped()
+{
+	SetWeaponState(EWeaponState::EWS_Dropped);
+	FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, true);
+	WeaponMesh->DetachFromComponent(DetachRules);
+	SetOwner(nullptr);
+	MainOwnerCharacter = nullptr;
+	MainOwnerController = nullptr;
+}
+
+
 void AWeapon::Fire(const FVector& HitTarget)
 {
 	if (FireAnimation)
@@ -120,5 +132,26 @@ void AWeapon::Fire(const FVector& HitTarget)
 			}
 		}
 	}
+	SpendRound();
 	
 }
+
+void AWeapon::SpendRound()
+{
+	--Ammo;
+	SetHUDAmmo();
+}
+
+void AWeapon::SetHUDAmmo()
+{
+	MainOwnerCharacter = MainOwnerCharacter == nullptr ? Cast<AMainCharacter>(GetOwner()) : MainOwnerCharacter;
+	if (MainOwnerCharacter)
+	{
+		MainOwnerController = MainOwnerController == nullptr ? Cast<AMainPlayController>(MainOwnerCharacter->Controller) : MainOwnerController;
+		if (MainOwnerController)
+		{
+			MainOwnerController->SetHUDWeaponAmmo(Ammo);
+		}
+	}
+}
+

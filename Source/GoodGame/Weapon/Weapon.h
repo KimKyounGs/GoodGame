@@ -26,6 +26,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void ShowPickupWidget(bool bShowWidget);
 	virtual void Fire(const FVector& HitTarget);
+	void Dropped();
+	void SetHUDAmmo();
 
 	/**
 	* Textures for the weapon crosshairs
@@ -100,13 +102,24 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	class UWidgetComponent* PickupWidget;
 
-
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	class UAnimationAsset* FireAnimation;
 
-	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ACasing> CasingClass;
+
+	UPROPERTY(EditAnywhere)
+	int32 Ammo;
+
+	void SpendRound();
+
+	UPROPERTY(EditAnywhere)
+	int32 MagCapacity;
+
+	UPROPERTY()
+	class AMainCharacter* MainOwnerCharacter;
+	UPROPERTY()
+	class AMainPlayController* MainOwnerController;
 	
 public:
 	FORCEINLINE void SetWeaponState(EWeaponState State) { WeaponState = State; }

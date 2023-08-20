@@ -16,6 +16,7 @@ class GOODGAME_API AMainPlayController : public APlayerController
 	
 public:
 	void SetHUDHealth(float Health, float MaxHealth);
+	void SetHUDWeaponAmmo(int32 Ammo);
 protected:
 	virtual void BeginPlay() override;
 
