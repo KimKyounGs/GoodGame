@@ -168,6 +168,8 @@ void AMainCharacter::EquipButtonPressed()
 
 void AMainCharacter::GetOverlappingWeapon(AWeapon* Weapon)
 {
+	OverlappingWeapon = Weapon;
+	/*
 	if (Weapon)
 	{
 		OverlappingWeapon = Weapon;
@@ -175,10 +177,10 @@ void AMainCharacter::GetOverlappingWeapon(AWeapon* Weapon)
 	}
 	else
 	{
-		OverlappingWeapon = NULL;
+		OverlappingWeapon = nullptr;
 		OverlappingWeapon->ShowPickupWidget(false);
 	}
-
+	*/
 }
 
 bool AMainCharacter::IsWeaponEquipped()

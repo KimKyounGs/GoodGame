@@ -82,10 +82,10 @@ void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 	if (MainCharacter)
 	{
+		ShowPickupWidget(false);
 		MainCharacter->GetOverlappingWeapon(nullptr);
 	}
 }
-
 
 void AWeapon::ShowPickupWidget(bool bShowWidget)
 {
@@ -94,6 +94,7 @@ void AWeapon::ShowPickupWidget(bool bShowWidget)
 		PickupWidget->SetVisibility(bShowWidget);
 	}
 }
+
 
 void AWeapon::Dropped()
 {
@@ -139,6 +140,12 @@ void AWeapon::Fire(const FVector& HitTarget)
 void AWeapon::SpendRound()
 {
 	Ammo = FMath::Clamp(Ammo - 1, 0, MagCapacity);
+	SetHUDAmmo();
+}
+
+void AWeapon::AddAmmo(int32 AmmoToAdd)
+{
+	Ammo = FMath::Clamp(Ammo - AmmoToAdd, 0, MagCapacity);
 	SetHUDAmmo();
 }
 

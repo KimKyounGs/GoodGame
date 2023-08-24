@@ -119,6 +119,10 @@ private:
 	ECombatState CombatState = ECombatState::ECS_Unoccupied;
 
 	void HandleReload();
+
+	int32 AmountToReload();
+
+	void UpdateAmmoValues();
 public:	
 	
 

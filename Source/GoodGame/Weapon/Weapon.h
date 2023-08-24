@@ -28,6 +28,7 @@ public:
 	void ShowPickupWidget(bool bShowWidget);
 	virtual void Fire(const FVector& HitTarget);
 	void Dropped();
+	void AddAmmo(int32 AmmoToAdd);
 	void SetHUDAmmo();
 
 	/**
@@ -63,10 +64,13 @@ public:
 	* Automatic fire
 	*/
 	UPROPERTY(EditAnywhere, Category = Combat)
-		float FireDelay = .15f;
+	float FireDelay = .15f;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
-		bool bAutomatic = true;
+	bool bAutomatic = true;
+
+	UPROPERTY(EditAnywhere)
+	class USoundCue* EquipSound;
 
 
 protected:
@@ -135,4 +139,7 @@ public:
 	bool IsEmpty();
 
 	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
+
+	FORCEINLINE int32 GetAmmo() const { return Ammo; }
+	FORCEINLINE int32 GetMagCapacity() const { return MagCapacity; }
 };
