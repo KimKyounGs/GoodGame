@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GoodGame/Weapon/Weapon.h"
+#include "GoodGame/MainCharacterTypes/CombatState.h"
 
 
 
@@ -84,4 +85,6 @@ void UMainCharacterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 
 
 	}
+
+	bUseFABRIK = MainCharacter->GetCombatState() != ECombatState::ECS_Reloading;
 }

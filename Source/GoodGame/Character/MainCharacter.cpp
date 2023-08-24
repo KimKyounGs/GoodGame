@@ -15,6 +15,7 @@
 #include "GoodGame/GoodGame.h"
 #include "GoodGame/PlayerController/MainPlayController.h"
 #include "GoodGame/GameMode/MainGameMode.h"
+#include "GoodGame/Weapon/WeaponTypes.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -85,6 +86,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Aim", IE_Released, this, &AMainCharacter::AimButoonReleased);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMainCharacter::FireButtonPressed);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AMainCharacter::FireButtonReleased);
+	PlayerInputComponent->BindAction("Reload", IE_Released, this, &AMainCharacter::ReloadButtonPressed);
 }
 
 void AMainCharacter::PostInitializeComponents()
@@ -154,7 +156,6 @@ void AMainCharacter::CrouchButtonPressed()
 	}
 
 }
-
 
 void AMainCharacter::EquipButtonPressed()
 {
@@ -277,6 +278,12 @@ AWeapon* AMainCharacter::GetEquippedWeapon()
 	return Combat->EquippedWeapon;
 }
 
+ECombatState AMainCharacter::GetCombatState() const
+{
+	if (Combat == nullptr) return ECombatState::ECS_MAX;
+	return Combat->CombatState;
+}
+
 void AMainCharacter::FireButtonPressed()
 {
 	if (Combat)
@@ -305,6 +312,29 @@ void AMainCharacter::PlayFireMontage(bool bAiming)
 		AnimInstance->Montage_Play(FireWeaponMontage);
 		FName SectionName;
 		SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
+		AnimInstance->Montage_JumpToSection(SectionName);
+	}
+}
+
+void AMainCharacter::PlayReloadMontage()
+{
+	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && ReloadMontage)
+	{
+		AnimInstance->Montage_Play(ReloadMontage);
+		FName SectionName;
+
+		switch (Combat->EquippedWeapon->GetWeaponType())
+		{
+		case EWeaponType::EWT_AssaultRifle:
+			SectionName = FName("Rifle");
+			break;
+		default:
+			break;
+		}
+
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
@@ -380,6 +410,15 @@ void AMainCharacter::HideCameraIfCharacterClose()
 		}
 	}
 }
+
+void AMainCharacter::ReloadButtonPressed()
+{
+	if (Combat)
+	{
+		Combat->Reload();
+	}
+}
+
 
 /*
 void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

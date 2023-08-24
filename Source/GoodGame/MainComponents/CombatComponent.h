@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "GoodGame/HUD/MainHUD.h"
+#include "GoodGame/Weapon/WeaponTypes.h"
+#include "GoodGame/MainCharacterTypes/CombatState.h"
 #include "CombatComponent.generated.h"
 
 #define TRACE_LENGTH 80000.f
@@ -22,6 +24,9 @@ public:
 	friend class AMainCharacter;
 
 	void EquipWeapon(class AWeapon* WeaponToEquip);
+	void Reload();
+	UFUNCTION(BlueprintCallable)
+	void FinishReload();
 protected:
 	virtual void BeginPlay() override;
 
@@ -98,9 +103,22 @@ private:
 	void StartFireTimer();
 	void FireTimerFinished();
 
+
+	// Carried ammo for the cuyrrently-equipped weapon
 	bool CanFire();
 
+	int32 CarriedAmmo;
 
+	TMap<EWeaponType, int32> CarriedAmmoMap;
+
+	UPROPERTY(EditAnywhere)
+	int32 StartingARAmmo = 30;
+
+	void InitializeCarriedAmmo();
+
+	ECombatState CombatState = ECombatState::ECS_Unoccupied;
+
+	void HandleReload();
 public:	
 	
 
