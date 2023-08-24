@@ -23,4 +23,5 @@ protected:
 
 private:
 	class AMainHUD* MainHUD;
+
 };

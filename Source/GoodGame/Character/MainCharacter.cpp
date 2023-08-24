@@ -318,6 +318,14 @@ void AMainCharacter::PlayFireMontage(bool bAiming)
 	}
 }
 
+void AMainCharacter::ReloadButtonPressed()
+{
+	if (Combat)
+	{
+		Combat->Reload();
+	}
+}
+
 void AMainCharacter::PlayReloadMontage()
 {
 	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
@@ -410,14 +418,6 @@ void AMainCharacter::HideCameraIfCharacterClose()
 		{
 			Combat->EquippedWeapon->GetWeaponMesh()->bOwnerNoSee = false;
 		}
-	}
-}
-
-void AMainCharacter::ReloadButtonPressed()
-{
-	if (Combat)
-	{
-		Combat->Reload();
 	}
 }
 

@@ -4,6 +4,7 @@
 #include "MainHUD.h"
 #include "GameFramework/PlayerController.h"
 #include "CharacterOverlay.h"
+#include "GoodGame/Enemy/EnemyOverlay.h"
 
 void AMainHUD::BeginPlay()
 {
@@ -19,6 +20,7 @@ void AMainHUD::AddCharacterOverlay()
 	if (PlayerController && CharacterOverlayClass)
 	{
 		CharacterOverlay = CreateWidget<UCharacterOverlay>(PlayerController, CharacterOverlayClass);
+		
 		CharacterOverlay->AddToViewport();
 	}
 }

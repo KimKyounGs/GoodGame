@@ -6,6 +6,7 @@
 #include "GoodGame/HUD/CharacterOverlay.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "GoodGame/Enemy/EnemyOverlay.h"
 
 void AMainPlayController::BeginPlay()
 {
