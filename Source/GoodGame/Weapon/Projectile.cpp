@@ -3,7 +3,6 @@
 
 #include "Projectile.h"
 #include "Components/BoxComponent.h"
-#include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Particles/ParticleSystem.h"
@@ -23,10 +22,6 @@ AProjectile::AProjectile()
 	CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block); //이 코드는 'Visibility' 충돌 채널에 대한 CollisionBox의 반응을 'Block'(차단)으로 설정합니다.
 	CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block); //이 코드는 'WorldStatic' 충돌 채널에 대한 CollisionBox의 반응을 'Block'으로 설정합니다.
 	CollisionBox->SetCollisionResponseToChannel(ECC_SkeletalMesh, ECollisionResponse::ECR_Block);
-
-	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
-	// bRotationFollowsVelocity를 true로 설정하면 발사체가 날아가는 방향을 향해 자연스럽게 회전하게 되므로, 예를 들어 총알이나 로켓과 같은 오브젝트에 사용되곤 합니다.
-	ProjectileMovementComponent->bRotationFollowsVelocity = true;
 
 }
 
