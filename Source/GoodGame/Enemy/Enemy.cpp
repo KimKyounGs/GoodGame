@@ -25,7 +25,6 @@ void AEnemy::BeginPlay()
 	// 프로그래스바 정말 힘들다.
 	if (HealthWidget && HealthWidget->GetUserWidgetObject())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Good2"));
 		UUserWidget* UserWidget = HealthWidget->GetUserWidgetObject();
 
 		// 이제 UserWidget에서 프로그래스바를 찾습니다.

@@ -18,7 +18,6 @@ void AProjectileRocket::BeginPlay()
 
 	CollisionBox->OnComponentHit.AddDynamic(this, &AProjectileRocket::OnHit);
 
-
 	if (TrailSystem)
 	{
 		TrailSystemComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
