@@ -56,15 +56,17 @@ void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UpdateHUDHealth();
 	OnTakeAnyDamage.AddDynamic(this, &AMainCharacter::ReceiveDamage);
 
+	// 타이머 이용해서 늦게 함수 호출.
+	// 참고 : https://koreanfoodie.me/1164
+	FTimerHandle myTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(myTimerHandle, this, &AMainCharacter::UpdateHUDHealth, 0.2f, true);
 }
 
 void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	AimOffSet(DeltaTime);
 }
 

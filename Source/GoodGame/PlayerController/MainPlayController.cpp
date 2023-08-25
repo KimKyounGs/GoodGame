@@ -19,7 +19,7 @@ void AMainPlayController::BeginPlay()
 void AMainPlayController::SetHUDHealth(float Health, float MaxHealth)
 {
 	MainHUD = MainHUD == nullptr ? Cast<AMainHUD>(GetHUD()) : MainHUD;
-	MainHUD->AddCharacterOverlay();
+	//MainHUD->AddCharacterOverlay();
 
 	bool bHUDValid = MainHUD &&
 		MainHUD->CharacterOverlay &&

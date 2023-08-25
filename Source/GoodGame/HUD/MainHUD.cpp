@@ -10,7 +10,7 @@ void AMainHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//AddCharacterOverlay();
+	AddCharacterOverlay();
 }
 
 void AMainHUD::AddCharacterOverlay()

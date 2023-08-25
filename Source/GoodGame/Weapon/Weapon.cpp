@@ -111,6 +111,7 @@ void AWeapon::Fire(const FVector& HitTarget)
 {
 	if (FireAnimation)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Fire"));
 		WeaponMesh->PlayAnimation(FireAnimation, false);
 	}
 	
