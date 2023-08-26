@@ -122,6 +122,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	int32 StartingSMGAmmo = 0;
 
+	UPROPERTY(EditAnywhere)
+	int32 StartingShotgunAmmo = 0;
+
+	UPROPERTY(EditAnywhere)
+	int32 StartingSniperAmmo = 0;
+
 	void InitializeCarriedAmmo();
 
 	ECombatState CombatState = ECombatState::ECS_Unoccupied;

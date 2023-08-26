@@ -26,6 +26,8 @@ public:
 	void PlayReloadMontage();
 	void PlayHitReactMontage();
 	void Elim();
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowSniperScopeWidget(bool bShowScope);
 
 
 protected:
