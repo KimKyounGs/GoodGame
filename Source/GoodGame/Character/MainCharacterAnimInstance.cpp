@@ -65,6 +65,7 @@ void UMainCharacterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 
 	if (bWeaponEquipped && EquippedWeapon && EquippedWeapon->GetWeaponMesh() && MainCharacter->GetMesh())
 	{
+		
 		/*
 		*  1 :첫 번째 줄은 'EquippedWeapon'이라는 현재 장착된 무기에서 무기의 메시를 가져와서 그것의 "LeftHandSocket"이라는 소켓의 변환을 가져옵니다. 이 변환은 위치와 회전을 포함하며, 월드 공간에서의 상대적 위치와 방향을 나타냅니다.
 		*  3 : 이 줄에서는 'MainCharacter'의 메시를 가져와 'hand_r'이라는 본(뼈대)의 공간으로 변환을 수행합니다. 이 변환은 'LeftHandTransform'의 위치와 0의 회전을 입력으로 받아, 'OutPosition'과 'OutRotation'에 결과를 저장합니다.

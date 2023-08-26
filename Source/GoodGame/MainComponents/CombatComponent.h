@@ -27,12 +27,18 @@ public:
 	void Reload();
 	UFUNCTION(BlueprintCallable)
 	void FinishReload();
+
+	void FireButtonPressed(bool bPressed);
+
+	UFUNCTION(BlueprintCallable)
+	void ShotgunShellReload();
+
+	void JumpToShotgunEnd();
+
 protected:
 	virtual void BeginPlay() override;
 
 	void SetAiming(bool bIsAiming);
-
-	void FireButtonPressed(bool bPressed);
 
 	void Fire();
 
@@ -40,6 +46,8 @@ protected:
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 	void SetHUDCrosshairs(float DeltaTime);
+
+	void UpdateShotgunAmmoValues();
 
 private:
 	
@@ -127,6 +135,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	int32 StartingSniperAmmo = 0;
+
+	UPROPERTY(EditAnywhere)
+	int32 StartingGrenadeLauncherAmmo = 0;
 
 	void InitializeCarriedAmmo();
 

@@ -10,6 +10,7 @@
 #include "Casing.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "GoodGame/PlayerController/MainPlayController.h"
+#include "GoodGame/MainComponents/CombatComponent.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -140,18 +141,37 @@ void AWeapon::Fire(const FVector& HitTarget)
 void AWeapon::SpendRound()
 {
 	Ammo = FMath::Clamp(Ammo - 1, 0, MagCapacity);
+	
+	MainOwnerCharacter = MainOwnerCharacter == nullptr ? Cast<AMainCharacter>(GetOwner()) : MainOwnerCharacter;
+	if (MainOwnerCharacter && MainOwnerCharacter->GetCombat() && IsFull())
+	{
+		MainOwnerCharacter->GetCombat()->JumpToShotgunEnd();
+	}
+	
 	SetHUDAmmo();
 }
 
 void AWeapon::AddAmmo(int32 AmmoToAdd)
 {
 	Ammo = FMath::Clamp(Ammo - AmmoToAdd, 0, MagCapacity);
+	
+	MainOwnerCharacter = MainOwnerCharacter == nullptr ? Cast<AMainCharacter>(GetOwner()) : MainOwnerCharacter;
+	if (MainOwnerCharacter && MainOwnerCharacter->GetCombat() && IsFull())
+	{
+		MainOwnerCharacter->GetCombat()->JumpToShotgunEnd();
+	}
+	
 	SetHUDAmmo();
 }
 
 bool AWeapon::IsEmpty()
 {
 	return Ammo <= 0;
+}
+
+bool AWeapon::IsFull()
+{
+	return Ammo == MagCapacity;
 }
 
 void AWeapon::SetHUDAmmo()
