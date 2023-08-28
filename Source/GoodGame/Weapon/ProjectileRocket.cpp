@@ -17,7 +17,7 @@ void AProjectileRocket::BeginPlay()
 
 	CollisionBox->OnComponentHit.AddDynamic(this, &AProjectileRocket::OnHit);
 
-	//SpawnTrailSystem();
+	SpawnTrailSystem();
 
 	if (ProjectileLoop && LoopingSoundAttenuation)
 	{

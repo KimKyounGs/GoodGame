@@ -117,9 +117,10 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ACasing> CasingClass;
 
+	
 	UPROPERTY(EditAnywhere)
 	int32 Ammo;
-
+	
 	void SpendRound();
 
 	UPROPERTY(EditAnywhere)
