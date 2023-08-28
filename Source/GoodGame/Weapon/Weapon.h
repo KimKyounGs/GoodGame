@@ -12,6 +12,7 @@ enum class EWeaponState : uint8
 {
 	EWS_Initial UMETA(DisplayName = "Initial State"), // 월드에 무기가 그대로 있을 때의 상태. 아직 아무도 집어들지 않았고 캐릭터가 집어 들고 장비할 수 있는 상태.
 	EWS_Equipped UMETA(DisplayName = "Equipped"), // 무기가 장비되어 있음.
+	EWS_EquippedSecondary UMETA(DisplayName = "Equipped Secondary"),
 	EWS_Dropped UMETA(DisplayName = "Droppped"), // 무기를 가지고 있다가 떨어뜨렸을 때
 
 	EWS_MAX UMETA(DisplayName = "DefaultMAX") // 이렇게 정의된 최대값은 일밙거으로 범위 체크나 반복문에서 사용된다. 또한 열거형의 마지막 항목을 식별함.
@@ -77,8 +78,14 @@ public:
 	*/
 	void EnableCustomDepth(bool bEnable);
 
+	bool bDestroyWeapon = false;
+
 protected:
 	virtual void BeginPlay() override;
+	virtual void OnWeaponStateSet();
+	virtual void OnEquipped();
+	virtual void OnDropped();
+	virtual void OnEquippedSecondary();
 
 	UFUNCTION()
 	virtual void OnSphereOverlap(

@@ -24,6 +24,7 @@ public:
 	friend class AMainCharacter;
 
 	void EquipWeapon(class AWeapon* WeaponToEquip);
+	void SwapWeapons();
 	void Reload();
 	UFUNCTION(BlueprintCallable)
 	void FinishReload();
@@ -52,18 +53,28 @@ protected:
 
 	void SetHUDCrosshairs(float DeltaTime);
 
-	void UpdateShotgunAmmoValues();
 
+	void DropEquippedWeapon();
+	void AttachActorToRightHand(AActor* ActorToAttach);
+	void AttachActorToBackpack(AActor* ActorToAttach);
 	void UpdateCarriedAmmo();
+	void PlayEquipWeaponSound(AWeapon* WeaponToEquip);
+	void ReloadEmptyWeapon();
+	void EquipPrimaryWeapon(AWeapon* WeaponToEquip);
+	void EquipSecondaryWeapon(AWeapon* WeaponToEquip);
 
 private:
-	
+	UPROPERTY()
 	class AMainCharacter* Character;
 	// 나중에 맵 새로 파면 이 부분 블프 고쳐주기.
+	UPROPERTY()
 	class AMainPlayController* Controller;
+	UPROPERTY()
 	class AMainHUD* HUD;
 
 	AWeapon* EquippedWeapon;
+
+	AWeapon* SecondaryWeapon;
 
 	UPROPERTY(EditAnywhere)
 	float BaseWalkSpeed;
@@ -158,12 +169,12 @@ private:
 	int32 AmountToReload();
 
 	void UpdateAmmoValues();
-
+	void UpdateShotgunAmmoValues();
 	void ThrowGrenade();
 
 
 public:	
-	
+	bool ShouldSwapWeapons();
 
 
 

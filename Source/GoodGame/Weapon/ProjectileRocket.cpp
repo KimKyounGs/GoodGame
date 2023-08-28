@@ -15,7 +15,7 @@ void AProjectileRocket::BeginPlay()
 	Super::BeginPlay();
 
 
-	CollisionBox->OnComponentHit.AddDynamic(this, &AProjectileRocket::OnHit);
+	//CollisionBox->OnComponentHit.AddDynamic(this, &AProjectileRocket::OnHit);
 
 	SpawnTrailSystem();
 

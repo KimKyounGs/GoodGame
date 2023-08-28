@@ -7,6 +7,7 @@
 #include "GoodGame/MainCharacterTypes/TurningInPlace.h"
 #include "GoodGame/Interfaces/InteractWithCrosshairInterface.h"
 #include "GoodGame/MainCharacterTypes/CombatState.h"
+#include "GoodGame/Weapon/Weapon.h"
 #include "MainCharacter.generated.h"
 
 UCLASS()
@@ -54,6 +55,9 @@ protected:
 	void FireButtonPressed();
 	void FireButtonReleased(); 
 	void GrenadeButtonPressed();
+	void DropOrDestroyWeapon(AWeapon* Weapon);
+	void DropOrDestroyWeapons();
+
 
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
