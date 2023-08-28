@@ -87,5 +87,10 @@ void UMainCharacterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 
 	}
 
-	bUseFABRIK = MainCharacter->GetCombatState() != ECombatState::ECS_Reloading;
+	
+	bUseFABRIK = MainCharacter->GetCombatState() == ECombatState::ECS_Unoccupied;
+	/*
+	bUseAimOffsets = MainCharacter->GetCombatState() == ECombatState::ECS_Unoccupied && !MainCharacter->GetDisableGameplay();
+	bTransformRightHand = MainCharacter->GetCombatState() == ECombatState::ECS_Unoccupied && !MainCharacter->GetDisableGameplay();
+	*/
 }

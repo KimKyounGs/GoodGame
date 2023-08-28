@@ -35,6 +35,9 @@ public:
 
 	void JumpToShotgunEnd();
 
+	UFUNCTION(BlueprintCallable)
+	void ThrowGrenadeFinished();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -148,6 +151,10 @@ private:
 	int32 AmountToReload();
 
 	void UpdateAmmoValues();
+
+	void ThrowGrenade();
+
+
 public:	
 	
 

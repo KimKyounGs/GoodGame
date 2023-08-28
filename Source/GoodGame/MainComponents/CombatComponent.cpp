@@ -139,7 +139,7 @@ bool UCombatComponent::CanFire()
 
 void UCombatComponent::Reload()
 {
-	if (CarriedAmmo > 0 && CombatState != ECombatState::ECS_Reloading)
+	if (CarriedAmmo > 0 && CombatState == ECombatState::ECS_Unoccupied)
 	{
 		if (Character == nullptr || EquippedWeapon == nullptr) return;
 		CombatState = ECombatState::ECS_Reloading;
@@ -161,46 +161,6 @@ void UCombatComponent::FinishReload()
 void UCombatComponent::HandleReload()
 {
 	Character->PlayReloadMontage();
-}
-
-void UCombatComponent::ShotgunShellReload()
-{
-	if (Character)
-	{
-		UpdateShotgunAmmoValues();
-	}
-}
-
-void UCombatComponent::UpdateShotgunAmmoValues()
-{
-	if (Character == nullptr || EquippedWeapon == nullptr) return;
-
-	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
-	{
-		CarriedAmmoMap[EquippedWeapon->GetWeaponType()] -= 1;
-		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
-	}
-	Controller = Controller == nullptr ? Cast<AMainPlayController>(Character->Controller) : Controller;
-	if (Controller)
-	{
-		Controller->SetHUDCarriedAmmo(CarriedAmmo);
-	}
-	EquippedWeapon->AddAmmo(-1);
-	bCanFire = true;
-	if (EquippedWeapon->IsFull() || CarriedAmmo == 0)
-	{
-		JumpToShotgunEnd();
-	}
-}
-
-void UCombatComponent::JumpToShotgunEnd()
-{
-	// Jump to ShotgunEnd section
-	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
-	if (AnimInstance && Character->GetReloadMontage())
-	{
-		AnimInstance->Montage_JumpToSection(FName("ShotgunEnd"));
-	}
 }
 
 void UCombatComponent::InitializeCarriedAmmo()
@@ -245,6 +205,60 @@ void UCombatComponent::UpdateAmmoValues()
 	EquippedWeapon->AddAmmo(-ReloadAmount);
 }
 
+void UCombatComponent::ShotgunShellReload()
+{
+	if (Character)
+	{
+		UpdateShotgunAmmoValues();
+	}
+}
+
+void UCombatComponent::UpdateShotgunAmmoValues()
+{
+	if (Character == nullptr || EquippedWeapon == nullptr) return;
+
+	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
+	{
+		CarriedAmmoMap[EquippedWeapon->GetWeaponType()] -= 1;
+		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
+	}
+	Controller = Controller == nullptr ? Cast<AMainPlayController>(Character->Controller) : Controller;
+	if (Controller)
+	{
+		Controller->SetHUDCarriedAmmo(CarriedAmmo);
+	}
+	EquippedWeapon->AddAmmo(-1);
+	bCanFire = true;
+	if (EquippedWeapon->IsFull() || CarriedAmmo == 0)
+	{
+		JumpToShotgunEnd();
+	}
+}
+
+void UCombatComponent::JumpToShotgunEnd()
+{
+	// Jump to ShotgunEnd section
+	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+	if (AnimInstance && Character->GetReloadMontage())
+	{
+		AnimInstance->Montage_JumpToSection(FName("ShotgunEnd"));
+	}
+}
+
+void UCombatComponent::ThrowGrenadeFinished()
+{
+	CombatState = ECombatState::ECS_Unoccupied;
+}
+
+void UCombatComponent::ThrowGrenade()
+{
+	if (CombatState != ECombatState::ECS_Unoccupied) return;
+	CombatState = ECombatState::ECS_ThrowingGrenade;
+	if (Character)
+	{
+		Character->PlayThrowGrenadeMontage();
+	}
+}
 
 void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 {

@@ -25,7 +25,11 @@ public:
 	void PlayFireMontage(bool bAiming);
 	void PlayReloadMontage();
 	void PlayHitReactMontage();
+	void PlayThrowGrenadeMontage();
 	void Elim();
+
+	bool bDisableGameplay = false;
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowSniperScopeWidget(bool bShowScope);
 
@@ -45,7 +49,9 @@ protected:
 	void AimOffSet(float DeltaTime);
 	virtual void Jump() override;
 	void FireButtonPressed();
-	void FireButtonReleased();
+	void FireButtonReleased(); 
+	void GrenadeButtonPressed();
+
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
@@ -87,6 +93,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	UAnimMontage* HitReactMontage;
 
+	// Elim();
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	UAnimMontage* ThrowGrenadeMontage;
 
 	void HideCameraIfCharacterClose();
 
@@ -117,5 +127,6 @@ public:
 	AWeapon* GetEquippedWeapon();
 	ECombatState GetCombatState() const;
 	FORCEINLINE UCombatComponent* GetCombat() const { return Combat; }
+	FORCEINLINE bool GetDisableGameplay() const { return bDisableGameplay; }
 	FORCEINLINE UAnimMontage* GetReloadMontage() const { return ReloadMontage; }
 };

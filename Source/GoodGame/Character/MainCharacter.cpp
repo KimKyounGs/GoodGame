@@ -89,6 +89,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMainCharacter::FireButtonPressed);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AMainCharacter::FireButtonReleased);
 	PlayerInputComponent->BindAction("Reload", IE_Released, this, &AMainCharacter::ReloadButtonPressed);
+	PlayerInputComponent->BindAction("ThrowGrenade", IE_Pressed, this, &AMainCharacter::GrenadeButtonPressed);
 }
 
 void AMainCharacter::PostInitializeComponents()
@@ -131,8 +132,6 @@ void AMainCharacter::LookUp(float Value)
 	AddControllerPitchInput(Value);
 }
 
-
-
 void AMainCharacter::Jump()
 {
 	if (bIsCrouched)
@@ -144,7 +143,6 @@ void AMainCharacter::Jump()
 		Super::Jump();
 	}
 }
-
 
 void AMainCharacter::CrouchButtonPressed()
 {
@@ -304,6 +302,15 @@ void AMainCharacter::FireButtonReleased()
 	}
 }
 
+void AMainCharacter::GrenadeButtonPressed()
+{
+	if (Combat)
+	{
+		Combat->ThrowGrenade();
+	}
+}
+
+
 void AMainCharacter::PlayFireMontage(bool bAiming)
 {
 	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
@@ -366,6 +373,15 @@ void AMainCharacter::PlayReloadMontage()
 		}
 
 		AnimInstance->Montage_JumpToSection(SectionName);
+	}
+}
+
+void AMainCharacter::PlayThrowGrenadeMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && ThrowGrenadeMontage)
+	{
+		//AnimInstance->Montage_Play(ThrowGrenadeMontage);
 	}
 }
 
