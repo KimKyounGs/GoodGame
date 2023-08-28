@@ -34,6 +34,8 @@ public:
 	void ShowSniperScopeWidget(bool bShowScope);
 
 	void UpdateHUDHealth();
+	void UpdateHUDShield();
+	void UpdateHUD();
 
 protected:
 	virtual void BeginPlay() override;
@@ -114,6 +116,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
 	float Health = 100.f;
 
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	float MaxShield = 100.f;
+
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	float Shield = 100.f;
+
 	class AMainPlayController* MainPlayerController;
 
 
@@ -129,6 +137,9 @@ public:
 	FORCEINLINE float GetHealth() const { return Health; }
 	FORCEINLINE void SetHealth(float Amount) { Health = Amount; }
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+	FORCEINLINE float GetShield() const { return Shield; }
+	FORCEINLINE void SetShield(float Amount) { Shield = Amount; }
+	FORCEINLINE float GetMaxShield() const { return MaxShield; }
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	AWeapon* GetEquippedWeapon();
 	ECombatState GetCombatState() const;

@@ -63,13 +63,20 @@ void AMainCharacter::BeginPlay()
 	// 타이머 이용해서 늦게 함수 호출.
 	// 참고 : https://koreanfoodie.me/1164
 	FTimerHandle myTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(myTimerHandle, this, &AMainCharacter::UpdateHUDHealth, 0.2f, true);
+	GetWorld()->GetTimerManager().SetTimer(myTimerHandle, this, &AMainCharacter::UpdateHUD, 0.2f, false);
+	//UpdateHUD();
 }
 
 void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AimOffSet(DeltaTime);
+}
+
+void AMainCharacter::UpdateHUD()
+{
+	UpdateHUDHealth();
+	UpdateHUDShield();
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -417,8 +424,28 @@ FVector AMainCharacter::GetHitTarget() const
 
 void AMainCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
 {
-	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
+
+	// if (bElimmed) return;
+
+	float DamageToHealth = Damage;
+	if (Shield > 0.f)
+	{
+		if (Shield >= Damage)
+		{
+			Shield = FMath::Clamp(Shield - Damage, 0.f, MaxShield);
+			DamageToHealth = 0.f;
+		}
+		else
+		{
+			Shield = 0.f;
+			DamageToHealth = FMath::Clamp(DamageToHealth - Shield, 0.f, Damage);
+		}
+	}
+
+	Health = FMath::Clamp(Health - DamageToHealth, 0.f, MaxHealth);
+
 	UpdateHUDHealth();
+	UpdateHUDShield();
 	PlayHitReactMontage();
 
 	if (Health == 0.f)
@@ -431,6 +458,7 @@ void AMainCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDa
 			MainGameMode->PlayerEliminated(this, MainPlayerController, AttackerController);
 		}
 	}
+
 }
 
 void AMainCharacter::UpdateHUDHealth()
@@ -439,6 +467,15 @@ void AMainCharacter::UpdateHUDHealth()
 	if (MainPlayerController)
 	{
 		MainPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
+}
+
+void AMainCharacter::UpdateHUDShield()
+{
+	MainPlayerController = MainPlayerController == nullptr ? Cast<AMainPlayController>(Controller) : MainPlayerController;
+	if (MainPlayerController)
+	{
+		MainPlayerController->SetHUDShield(Shield, MaxShield);
 	}
 }
 

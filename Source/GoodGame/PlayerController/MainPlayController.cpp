@@ -18,8 +18,8 @@ void AMainPlayController::BeginPlay()
 
 void AMainPlayController::SetHUDHealth(float Health, float MaxHealth)
 {
+	UE_LOG(LogTemp, Warning, TEXT("SetHUDHealth"));
 	MainHUD = MainHUD == nullptr ? Cast<AMainHUD>(GetHUD()) : MainHUD;
-	//MainHUD->AddCharacterOverlay();
 
 	bool bHUDValid = MainHUD &&
 		MainHUD->CharacterOverlay &&
@@ -66,5 +66,28 @@ void AMainPlayController::SetHUDCarriedAmmo(int32 Ammo)
 	{
 		FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
 		MainHUD->CharacterOverlay->CarriedAmmoAmount->SetText(FText::FromString(AmmoText));
+	}
+}
+
+void AMainPlayController::SetHUDShield(float Shield, float MaxShield)
+{
+	UE_LOG(LogTemp, Warning, TEXT("SetHUDShield"));
+	MainHUD = MainHUD == nullptr ? Cast<AMainHUD>(GetHUD()) : MainHUD;
+	bool bHUDValid = MainHUD &&
+		MainHUD->CharacterOverlay &&
+		MainHUD->CharacterOverlay->ShieldBar &&
+		MainHUD->CharacterOverlay->ShieldText;
+	if (bHUDValid)
+	{
+		const float ShieldPercent = Shield / MaxShield;
+		MainHUD->CharacterOverlay->ShieldBar->SetPercent(ShieldPercent);
+		FString ShieldText = FString::Printf(TEXT("%d/%d"), FMath::CeilToInt(Shield), FMath::CeilToInt(MaxShield));
+		MainHUD->CharacterOverlay->ShieldText->SetText(FText::FromString(ShieldText));
+	}
+	else
+	{
+		//bInitializeCharacterOverlay = true;
+		HUDShield = Shield;
+		HUDMaxShield = MaxShield;
 	}
 }

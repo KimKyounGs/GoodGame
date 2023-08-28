@@ -16,6 +16,7 @@ class GOODGAME_API AMainPlayController : public APlayerController
 	
 public:
 	void SetHUDHealth(float Health, float MaxHealth);
+	void SetHUDShield(float Shield, float MaxShield);
 	void SetHUDWeaponAmmo(int32 Ammo);
 	void SetHUDCarriedAmmo(int32 Ammo);
 protected:
@@ -24,4 +25,6 @@ protected:
 private:
 	class AMainHUD* MainHUD;
 
+	float HUDShield;
+	float HUDMaxShield;
 };
