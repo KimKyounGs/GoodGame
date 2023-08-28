@@ -28,6 +28,7 @@ private:
 
 protected:
 	virtual void BeginPlay() override;
+	//virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 public:	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Stats")

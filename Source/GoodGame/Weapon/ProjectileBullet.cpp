@@ -29,7 +29,7 @@ void AProjectileBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		*/
 		if (OwnerController)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("ApplyDamage"));
+			//UE_LOG(LogTemp, Warning, TEXT("ApplyDamage"));
 			UGameplayStatics::ApplyDamage(OtherActor, Damage, OwnerController, this, UDamageType::StaticClass());
 		}
 	}
