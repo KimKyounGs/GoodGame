@@ -13,6 +13,8 @@ UCLASS()
 class GOODGAME_API AMainGameMode : public AGameMode
 {
 	GENERATED_BODY()
+public:
+	AMainGameMode();
 protected:
 	virtual void BeginPlay() override;
 
@@ -23,6 +25,7 @@ public:
 	UAudioComponent* AudioComponent;
 
 	UPROPERTY(EditAnywhere, Category = "Music")
-	class USoundBase* Music;
+	TArray<class USoundBase*> Music;
 
+	bool MusickPlaying = false;
 };
