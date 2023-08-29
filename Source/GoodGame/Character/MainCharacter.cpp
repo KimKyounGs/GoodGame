@@ -462,7 +462,6 @@ void AMainCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDa
 		if (MainGameMode)
 		{
 			FName LevelName = FName(TEXT("Lobby"));
-			UE_LOG(LogTemp, Warning, TEXT("Main Die"));
 			UGameplayStatics::OpenLevel(this, LevelName);
 			/*
 			MainPlayerController = MainPlayerController == nullptr ? Cast<AMainPlayController>(Controller) : MainPlayerController;
