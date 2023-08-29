@@ -9,7 +9,6 @@
 AMainGameMode::AMainGameMode()
 {
 	// Create Audio component and attach to RootComponent
-	PrimaryActorTick.bCanEverTick = true;
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
 	AudioComponent->SetupAttachment(RootComponent);
 
@@ -17,40 +16,17 @@ AMainGameMode::AMainGameMode()
 
 void AMainGameMode::BeginPlay()
 {
+	int32 Selection = FMath::RandRange(0, Music.Num() - 1);
+	AudioComponent->SetSound(Music[Selection]);
 	if (AudioComponent && AudioComponent->Sound)
 	{
-		AudioComponent->SetSound(Music[MusicArrIdx++]);
+		UE_LOG(LogTemp, Warning, TEXT("Play Music"));
+		AudioComponent->Play();
 	}
 
 }
 
-void AMainGameMode::Tick(float DeltaTime)
+void AMainGameMode::PlayerEliminated(AMainCharacter* ElimmedCharacter, AMainPlayController* VictimController, AMainPlayController* AttackerController)
 {
-	PlayMusic();
 
-	if (AudioComponent->IsPlaying())
-	{
-		bMusickPlaying = true;
-	}
-	else
-	{
-		bMusickPlaying = false;
-	}
-}
-
-void AMainGameMode::PlayMusic()
-{
-	if (bMusickPlaying) return;
-
-	if (MusicArrIdx == Music.Num())
-	{
-		MusicArrIdx = 0;
-	}
-
-	if (AudioComponent && AudioComponent->Sound)
-	{
-		AudioComponent->SetSound(Music[MusicArrIdx++]);
-	}
-	
-	AudioComponent->Play()
 }

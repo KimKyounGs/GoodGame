@@ -17,7 +17,6 @@ public:
 	AMainGameMode();
 protected:
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
 
 public:
 	virtual void PlayerEliminated(class AMainCharacter* ElimmedCharacter, class AMainPlayController* VictimController, AMainPlayController* AttackerController);
@@ -28,8 +27,5 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Music")
 	TArray<class USoundBase*> Music;
 
-	bool bMusickPlaying = false;
-	int32 MusicArrIdx = 0;
-
-	void PlayMusic();
+	bool MusickPlaying = false;
 };
