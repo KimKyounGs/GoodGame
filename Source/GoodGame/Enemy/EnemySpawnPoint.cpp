@@ -25,7 +25,6 @@ void AEnemySpawnPoint::Tick(float DeltaTime)
 
 void AEnemySpawnPoint::SpawnEnemy()
 {
-	UE_LOG(LogTemp, Warning, TEXT("SpawnEnemy"));
 	int32 NumPickupClasses = EnemyClasses.Num();
 	if (NumPickupClasses > 0)
 	{
@@ -37,6 +36,7 @@ void AEnemySpawnPoint::SpawnEnemy()
 			//SpawnedEnemy->OnDestroyed.AddDynamic(this, &AEnemySpawnPoint::StartSpawnPickupTimer);
 		}
 	}
+	StartSpawnEnemyTimer((AActor*)nullptr);
 }
 
 void AEnemySpawnPoint::SpawnEnemyTimerFinished()

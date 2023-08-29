@@ -17,6 +17,7 @@
 #include "GoodGame/PlayerController/MainPlayController.h"
 #include "GoodGame/GameMode/MainGameMode.h"
 #include "GoodGame/Weapon/WeaponTypes.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -460,9 +461,14 @@ void AMainCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDa
 		AMainGameMode* MainGameMode = GetWorld()->GetAuthGameMode<AMainGameMode>();
 		if (MainGameMode)
 		{
+			FName LevelName = FName(TEXT("Lobby"));
+			UE_LOG(LogTemp, Warning, TEXT("Main Die"));
+			UGameplayStatics::OpenLevel(this, LevelName);
+			/*
 			MainPlayerController = MainPlayerController == nullptr ? Cast<AMainPlayController>(Controller) : MainPlayerController;
 			AMainPlayController* AttackerController = Cast<AMainPlayController>(InstigatorController);
 			MainGameMode->PlayerEliminated(this, MainPlayerController, AttackerController);
+			*/
 		}
 	}
 

@@ -5,6 +5,7 @@
 #include "Components/WidgetComponent.h"
 #include "GoodGame/Enemy/EnemyOverlay.h"
 #include "Components/ProgressBar.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Actor.h"
 
 
@@ -58,4 +59,24 @@ void AEnemy::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType
 {
 	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
 	UpdateHealth();
+
+
+	if (Health == 0.f && !isDead)
+	{
+		isDead = true;
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if (AnimInstance && DieMontage)
+		{
+			AnimInstance->Montage_Play(DieMontage);
+			GetCharacterMovement()->StopMovementImmediately(); // 현재 움직임을 즉시 멈춤.
+			GetCharacterMovement()->DisableMovement(); // 움직임 완전히 비활성화
+			
+			//UE_LOG(LogTemp, Warning, TEXT("Die"));
+			this->SetLifeSpan(0.7f); // 액터 없애버림.
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Nop Die"));
+		}
+	}
 }

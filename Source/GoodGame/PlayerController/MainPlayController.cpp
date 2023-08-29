@@ -18,7 +18,6 @@ void AMainPlayController::BeginPlay()
 
 void AMainPlayController::SetHUDHealth(float Health, float MaxHealth)
 {
-	UE_LOG(LogTemp, Warning, TEXT("SetHUDHealth"));
 	MainHUD = MainHUD == nullptr ? Cast<AMainHUD>(GetHUD()) : MainHUD;
 
 	bool bHUDValid = MainHUD &&
@@ -71,7 +70,6 @@ void AMainPlayController::SetHUDCarriedAmmo(int32 Ammo)
 
 void AMainPlayController::SetHUDShield(float Shield, float MaxShield)
 {
-	UE_LOG(LogTemp, Warning, TEXT("SetHUDShield"));
 	MainHUD = MainHUD == nullptr ? Cast<AMainHUD>(GetHUD()) : MainHUD;
 	bool bHUDValid = MainHUD &&
 		MainHUD->CharacterOverlay &&

@@ -23,6 +23,9 @@ private:
 
 	class UProgressBar* HealthBar;
 
+	UPROPERTY(EditAnywhere, Category = Montage)
+	UAnimMontage* DieMontage;
+
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser);
 
@@ -37,4 +40,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Stats")
 	float Health = 150.f;
 
+	bool isDead = false;
 };
