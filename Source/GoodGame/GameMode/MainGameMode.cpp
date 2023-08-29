@@ -20,7 +20,6 @@ void AMainGameMode::BeginPlay()
 	if (AudioComponent && AudioComponent->Sound)
 	{
 		AudioComponent->SetSound(Music[MusicArrIdx++]);
-		AudioComponent->Play();
 	}
 
 }
@@ -53,5 +52,5 @@ void AMainGameMode::PlayMusic()
 		AudioComponent->SetSound(Music[MusicArrIdx++]);
 	}
 	
-	AudioComponent->Play();
+	AudioComponent->Play()
 }
