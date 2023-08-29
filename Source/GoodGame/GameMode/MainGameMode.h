@@ -13,6 +13,16 @@ UCLASS()
 class GOODGAME_API AMainGameMode : public AGameMode
 {
 	GENERATED_BODY()
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	virtual void PlayerEliminated(class AMainCharacter* ElimmedCharacter, class AMainPlayController* VictimController, AMainPlayController* AttackerController);
+
+	UPROPERTY(VisibleAnywhere, Category = "Music")
+	UAudioComponent* AudioComponent;
+
+	UPROPERTY(EditAnywhere, Category = "Music")
+	class USoundBase* Music;
+
 };
