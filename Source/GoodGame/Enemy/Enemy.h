@@ -35,10 +35,10 @@ protected:
 
 public:	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Stats")
-	float MaxHealth = 150.f;
+	float MaxHealth = 120.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Stats")
-	float Health = 150.f;
+	float Health = 120.f;
 
 	bool isDead = false;
 };
