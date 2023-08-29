@@ -53,6 +53,7 @@ AMainCharacter::AMainCharacter()
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 	Health = 100.0f;
 	MaxHealth = 100.0f;
+	DeathCnt = 0;
 }
 
 void AMainCharacter::BeginPlay()
@@ -464,6 +465,7 @@ void AMainCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDa
 			FName LevelName = FName(TEXT("Lobby"));
 			UE_LOG(LogTemp, Warning, TEXT("Main Die"));
 			UGameplayStatics::OpenLevel(this, LevelName);
+			DeathCnt++;
 			/*
 			MainPlayerController = MainPlayerController == nullptr ? Cast<AMainPlayController>(Controller) : MainPlayerController;
 			AMainPlayController* AttackerController = Cast<AMainPlayController>(InstigatorController);

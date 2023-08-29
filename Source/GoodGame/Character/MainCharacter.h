@@ -31,6 +31,9 @@ public:
 
 	bool bDisableGameplay = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DeathCnt")
+		int32 DeathCnt;
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowSniperScopeWidget(bool bShowScope);
 
