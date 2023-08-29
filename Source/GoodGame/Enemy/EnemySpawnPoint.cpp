@@ -21,8 +21,6 @@ void AEnemySpawnPoint::Tick(float DeltaTime)
 
 }
 
-
-
 void AEnemySpawnPoint::SpawnEnemy()
 {
 	int32 NumPickupClasses = EnemyClasses.Num();
