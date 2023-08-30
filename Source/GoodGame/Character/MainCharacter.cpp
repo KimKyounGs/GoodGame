@@ -268,6 +268,7 @@ void AMainCharacter::AimOffSet(float DeltaTime)
 
 	if (Speed == 0.f && !bIsInAir) // standing still, not Junmping
 	{
+		//UE_LOG(LogTemp, Warning, TEXT("AimSpeed = 0"));
 		FRotator CurrentAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
 		FRotator DeltaAimRotation = UKismetMathLibrary::NormalizedDeltaRotator(StartingAimRotation, CurrentAimRotation); // 강의랑 반대로 하니깐 되는데..?
 		AO_Yaw = DeltaAimRotation.Yaw;
@@ -280,6 +281,7 @@ void AMainCharacter::AimOffSet(float DeltaTime)
 	}
 	if (Speed > 0.f || bIsInAir) // running, or jumping
 	{
+		//UE_LOG(LogTemp, Warning, TEXT("AimSpeed > 0"));
 		StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
 		AO_Yaw = 0.f;
 		bUseControllerRotationYaw = true;
