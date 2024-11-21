@@ -116,36 +116,42 @@ void AWeapon::Dropped()
 	MainOwnerController = nullptr;
 }
 
-
 void AWeapon::Fire(const FVector& HitTarget)
 {
-	if (FireAnimation)
+	// 총 발사 애니메이션 재생
+	if (FireAnimation) 
 	{
+		// WeaponMesh에서 애니메이션 실행
 		WeaponMesh->PlayAnimation(FireAnimation, false);
 	}
-	
-	
-	if (CasingClass)
+
+	// 탄피 배출 효과
+	if (CasingClass) 
 	{
+		// AmmoEject 소켓을 WeaponMesh에서 찾음
 		const USkeletalMeshSocket* AmmoEjectSocket = WeaponMesh->GetSocketByName(FName("AmmoEject"));
-		if (AmmoEjectSocket)
+		if (AmmoEjectSocket) // 소켓이 유효하면
 		{
+			// 소켓의 위치와 회전 정보를 가져옴
 			FTransform SocketTransform = AmmoEjectSocket->GetSocketTransform(WeaponMesh);
 
+			// 월드 객체 가져오기
 			UWorld* World = GetWorld();
-			if (World)
+			if (World) // 월드가 유효하면
 			{
+				// 탄피 오브젝트를 스폰(생성)
 				World->SpawnActor<ACasing>(
-					CasingClass,
-					SocketTransform.GetLocation(),
-					SocketTransform.GetRotation().Rotator()
+					CasingClass,                     // 생성할 탄피 클래스
+					SocketTransform.GetLocation(),   // 소켓의 위치에서 생성
+					SocketTransform.GetRotation().Rotator() // 소켓의 회전값 사용
 				);
 			}
 		}
 	}
-	SpendRound();
-	
+
+	SpendRound(); // 잔여 총알 수 감소를 처리하는 함수 호출
 }
+
 
 void AWeapon::SpendRound()
 {

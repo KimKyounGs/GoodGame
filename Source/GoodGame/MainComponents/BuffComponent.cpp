@@ -27,55 +27,72 @@ void UBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	ShieldRampUp(DeltaTime);
 }
 
+// 체력 회복을 시작하는 함수
 void UBuffComponent::Heal(float HealAmount, float HealingTime)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Heal"));
-	bHealing = true;
-	HealingRate = HealAmount / HealingTime;
-	AmountToHeal += HealAmount;
+    UE_LOG(LogTemp, Warning, TEXT("Heal")); 
+
+    bHealing = true; // 체력 회복 활성화
+    HealingRate = HealAmount / HealingTime; // 초당 회복량 계산
+    AmountToHeal += HealAmount; // 총 회복할 체력량 업데이트
 }
 
+// 매 프레임 호출되어 체력을 점진적으로 회복하는 함수
 void UBuffComponent::HealRampUp(float DeltaTime)
 {
-	//if (!bHealing || Character == nullptr || Character->IsElimmed()) return;
-	if (!bHealing || Character == nullptr) return;
+    if (!bHealing || Character == nullptr) return;
 
-	const float HealThisFrame = HealingRate * DeltaTime;
-	Character->SetHealth(FMath::Clamp(Character->GetHealth() + HealThisFrame, 0.f, Character->GetMaxHealth()));
-	Character->UpdateHUDHealth();
-	AmountToHeal -= HealThisFrame;
+    // 이번 프레임에서 회복할 체력량 계산
+    const float HealThisFrame = HealingRate * DeltaTime;
 
-	if (AmountToHeal <= 0.f || Character->GetHealth() >= Character->GetMaxHealth())
-	{
-		bHealing = false;
-		AmountToHeal = 0.f;
-	}
+    // 캐릭터의 체력을 증가시키며, 최대 체력을 초과하지 않도록 제한
+    Character->SetHealth(FMath::Clamp(Character->GetHealth() + HealThisFrame, 0.f, Character->GetMaxHealth()));
+
+    // HUD에 체력 업데이트
+    Character->UpdateHUDHealth();
+
+    // 남은 회복량에서 이번 프레임의 회복량을 차감
+    AmountToHeal -= HealThisFrame;
+
+    // 체력이 최대에 도달하거나 남은 회복량이 0이 되면 회복 종료
+    if (AmountToHeal <= 0.f || Character->GetHealth() >= Character->GetMaxHealth())
+    {
+        bHealing = false; 
+        AmountToHeal = 0.f; 
+    }
 }
 
+// 방어막 보충을 시작하는 함수
 void UBuffComponent::ReplenishShield(float ShieldAmount, float ReplenishTime)
 {
-	bReplenishingShield = true;
-	ShieldReplenishRate = ShieldAmount / ReplenishTime;
-	ShieldReplenishAmount += ShieldAmount;
+    bReplenishingShield = true; // 방어막 보충 활성화
+    ShieldReplenishRate = ShieldAmount / ReplenishTime; // 초당 보충량 계산
+    ShieldReplenishAmount += ShieldAmount; // 총 보충할 방어막량 업데이트
 }
 
-
+// 매 프레임 호출되어 방어막을 점진적으로 보충하는 함수
 void UBuffComponent::ShieldRampUp(float DeltaTime)
 {
+    if (!bReplenishingShield || Character == nullptr) return;
 
-	//if (!bReplenishingShield || Character == nullptr || Character->IsElimmed()) return;
-	if (!bReplenishingShield || Character == nullptr) return;
+    // 이번 프레임에서 보충할 방어막량 계산
+    const float ReplenishThisFrame = ShieldReplenishRate * DeltaTime;
 
-	const float ReplenishThisFrame = ShieldReplenishRate * DeltaTime;
-	Character->SetShield(FMath::Clamp(Character->GetShield() + ReplenishThisFrame, 0.f, Character->GetMaxShield()));
-	Character->UpdateHUDShield();
-	ShieldReplenishAmount -= ReplenishThisFrame;
+    // 캐릭터의 방어막을 증가시키며, 최대 방어막량을 초과하지 않도록 제한
+    Character->SetShield(FMath::Clamp(Character->GetShield() + ReplenishThisFrame, 0.f, Character->GetMaxShield()));
 
-	if (ShieldReplenishAmount <= 0.f || Character->GetShield() >= Character->GetMaxShield())
-	{
-		bReplenishingShield = false;
-		ShieldReplenishAmount = 0.f;
-	}
+    // HUD에 방어막 업데이트
+    Character->UpdateHUDShield();
+
+    // 남은 보충량에서 이번 프레임의 보충량을 차감
+    ShieldReplenishAmount -= ReplenishThisFrame;
+
+    // 방어막이 최대에 도달하거나 남은 보충량이 0이 되면 보충 종료
+    if (ShieldReplenishAmount <= 0.f || Character->GetShield() >= Character->GetMaxShield())
+    {
+        bReplenishingShield = false; // 방어막 보충 비활성화
+        ShieldReplenishAmount = 0.f; // 남은 보충량 초기화
+    }
 }
 
 void UBuffComponent::SetInitialSpeeds(float BaseSpeed, float CrouchSpeed)

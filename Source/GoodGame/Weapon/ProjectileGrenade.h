@@ -19,8 +19,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	// 투사체가 튀게하는 함수
 	UFUNCTION()
-	void OnBounce(const FHitResult& ImpactResult, const FVector& ImpactVelocity);
+	void OnBounce(const FHitResult& ImpactResult, const FVector& ImpactVelocity); 
 private:
 
 	UPROPERTY(EditAnywhere)

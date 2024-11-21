@@ -58,9 +58,6 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
-	/*
-	* 상대가 때렸을 떄 맞는 애니메이션 재생
-	*/
 	if (MainCharacter)
 	{
 		MainCharacter->PlayHitReactMontage();

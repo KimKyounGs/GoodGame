@@ -56,7 +56,7 @@ void APickup::BindOverlapTimerFinished()
 
 void APickup::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
+	// PickUp 클래스에서 OnSphereOverlap 함수는 비어있고 상속 받은 자식 클래스에서 구현하게 만듦.
 }
 
 void APickup::Tick(float DeltaTime)
